@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figurinhas Copa 2026 🏆 WhatsApp</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(135deg, #1a472a 0%, #2d6a4f 50%, #1a472a 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+  .subtitle {
+    text-align: center;
+    opacity: 0.85;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .card canvas {
+    border-radius: 12px;
+    width: 170px;
+    height: 170px;
+    display: block;
+    margin: 0 auto 10px;
+    background: transparent;
+  }
+  .card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    opacity: 0.9;
+  }
+  .btn {
+    display: inline-block;
+    background: #ffd700;
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 7px 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn:hover { background: #ffec5c; transform: scale(1.05); }
+  .instructions {
+    max-width: 900px;
+    margin: 30px auto 0;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .instructions h2 { margin-bottom: 8px; font-size: 1rem; }
+</style>
+</head>
+<body>
+
+<h1>⚽ Figurinhas Copa 2026 🏆</h1>
+<p class="subtitle">Baixe as figurinhas e envie pelo WhatsApp! (PNG 512×512 com fundo transparente)</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="instructions">
+  <h2>📱 Como usar no WhatsApp</h2>
+  1. Baixe as figurinhas clicando em "Baixar Figurinha".<br>
+  2. No WhatsApp, abra uma conversa e toque em "Criar Pacote de Figurinhas" (ou use um app como <strong>Sticker.ly</strong> ou <strong>WhatsApp Sticker Maker</strong>).<br>
+  3. Importe as imagens PNG baixadas para o pacote.<br>
+  4. Pronto! Envie suas figurinhas nos chats da Copa! 🎉
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────
+// Helper: draw rounded rectangle
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+// Helper: draw soccer ball
+function drawBall(ctx, cx, cy, r) {
+  ctx.save();
+  // White ball
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = 'rgba(0,0,0,0.25)';
+  ctx.shadowBlur = 12;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Black pentagons pattern (simplified hex-pent pattern)
+  const patches = [
+    [0, 0],
+    [0, -1], [0.866, -0.5], [0.866, 0.5],
+    [0, 1], [-0.866, 0.5], [-0.866, -0.5]
+  ];
+  ctx.strokeStyle = '#111';
+  ctx.lineWidth = r * 0.06;
+  ctx.fillStyle = '#111';
+
+  // Center pentagon
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const a = (i * Math.PI * 2) / 6 - Math.PI / 2;
+    const px = cx + Math.cos(a) * r * 0.28;
+    const py = cy + Math.sin(a) * r * 0.28;
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+
+  // Surrounding patches
+  const dist = r * 0.6;
+  for (let i = 0; i < 6; i++) {
+    const a = (i * Math.PI * 2) / 6 - Math.PI / 2;
+    const pcx = cx + Math.cos(a) * dist;
+    const pcy = cy + Math.sin(a) * dist;
+    ctx.beginPath();
+    for (let j = 0; j < 6; j++) {
+      const ba = (j * Math.PI * 2) / 6 + a;
+      const px = pcx + Math.cos(ba) * r * 0.25;
+      const py = pcy + Math.sin(ba) * r * 0.25;
+      j === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Clip everything to circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.restore();
+}
+
+// Helper: draw trophy
+function drawTrophy(ctx, cx, cy, scale) {
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(scale, scale);
+
+  // Cup body
+  const grad = ctx.createLinearGradient(-60, -100, 60, 80);
+  grad.addColorStop(0, '#ffe066');
+  grad.addColorStop(0.4, '#ffd700');
+  grad.addColorStop(1, '#b8860b');
+  ctx.fillStyle = grad;
+  ctx.strokeStyle = '#8B6914';
+  ctx.lineWidth = 3;
+
+  // Main cup shape
+  ctx.beginPath();
+  ctx.moveTo(-55, -90);
+  ctx.lineTo(55, -90);
+  ctx.quadraticCurveTo(70, -10, 40, 60);
+  ctx.lineTo(20, 60);
+  ctx.lineTo(20, 80);
+  ctx.lineTo(45, 80);
+  ctx.lineTo(45, 100);
+  ctx.lineTo(-45, 100);
+  ctx.lineTo(-45, 80);
+  ctx.lineTo(-20, 80);
+  ctx.lineTo(-20, 60);
+  ctx.lineTo(-40, 60);
+  ctx.quadraticCurveTo(-70, -10, -55, -90);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // Handles
+  ctx.beginPath();
+  ctx.arc(-68, -30, 22, Math.PI * 0.5, Math.PI * 1.5);
+  ctx.lineWidth = 12;
+  ctx.strokeStyle = grad;
+  ctx.stroke();
+  ctx.strokeStyle = '#8B6914';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(68, -30, 22, -Math.PI * 0.5, Math.PI * 0.5);
+  ctx.lineWidth = 12;
+  ctx.strokeStyle = grad;
+  ctx.stroke();
+  ctx.strokeStyle = '#8B6914';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Stars on cup
+  ctx.fillStyle = '#fff8dc';
+  for (let i = -1; i <= 1; i++) {
+    drawStar(ctx, i * 28, -30, 5, 8, 4);
+  }
+
+  ctx.restore();
+}
+
+function drawStar(ctx, x, y, r1, r2, points) {
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const a = (i * Math.PI) / points - Math.PI / 2;
+    const r = i % 2 === 0 ? r2 : r1;
+    const px = x + Math.cos(a) * r;
+    const py = y + Math.sin(a) * r;
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+// Helper: emit stars/sparks
+function drawSparkles(ctx, count, cx, cy, radius, color) {
+  ctx.fillStyle = color;
+  for (let i = 0; i < count; i++) {
+    const a = (i / count) * Math.PI * 2;
+    const d = radius * (0.5 + Math.random() * 0.5);
+    const sx = cx + Math.cos(a) * d;
+    const sy = cy + Math.sin(a) * d;
+    ctx.beginPath();
+    ctx.arc(sx, sy, 6 + Math.random() * 8, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+// STICKER DEFINITIONS
+const stickers = [
+
+  // 1. CAMPEÃO!
+  {
+    name: '🏆 Campeão!',
+    draw(ctx) {
+      const s = 512;
+      // Background burst
+      const bg = ctx.createRadialGradient(s/2, s/2, 20, s/2, s/2, 280);
+      bg.addColorStop(0, '#fff700');
+      bg.addColorStop(0.5, '#ffb300');
+      bg.addColorStop(1, 'rgba(255,140,0,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 280, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Burst rays
+      ctx.save();
+      ctx.translate(s/2, s/2);
+      for (let i = 0; i < 16; i++) {
+        ctx.save();
+        ctx.rotate((i * Math.PI * 2) / 16);
+        ctx.beginPath();
+        ctx.moveTo(0, -60);
+        ctx.lineTo(12, -200);
+        ctx.lineTo(-12, -200);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255,220,0,0.5)';
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // Trophy
+      drawTrophy(ctx, s/2, s/2 - 30, 1.5);
+
+      // Text
+      ctx.font = 'bold 68px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#8B0000';
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 6;
+      ctx.strokeText('CAMPEÃO!', s/2, s - 60);
+      ctx.fillText('CAMPEÃO!', s/2, s - 60);
+
+      ctx.font = 'bold 32px Arial';
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillText('⭐ COPA 2026 ⭐', s/2, s - 20);
+    }
+  },
+
+  // 2. GOOOL!
+  {
+    name: '⚽ GOOOL!',
+    draw(ctx) {
+      const s = 512;
+      // Green field background
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 300);
+      bg.addColorStop(0, '#00c040');
+      bg.addColorStop(0.6, '#009930');
+      bg.addColorStop(1, 'rgba(0,120,30,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 300, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Net lines
+      ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+      ctx.lineWidth = 1.5;
+      for (let x = 30; x < s; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, s); ctx.stroke();
+      }
+      for (let y = 30; y < s; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(s, y); ctx.stroke();
+      }
+
+      // Ball
+      drawBall(ctx, s/2, s/2 + 70, 80);
+
+      // GOOOOL! text with big shadow
+      ctx.save();
+      ctx.translate(s/2, s/2 - 70);
+      ctx.rotate(-0.08);
+      ctx.font = 'bold 110px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#003300';
+      ctx.lineWidth = 10;
+      ctx.strokeText('GOOOOL!', 0, 0);
+      const tg = ctx.createLinearGradient(-200, -80, 200, 20);
+      tg.addColorStop(0, '#ffff00');
+      tg.addColorStop(1, '#ff9900');
+      ctx.fillStyle = tg;
+      ctx.fillText('GOOOOL!', 0, 0);
+      ctx.restore();
+    }
+  },
+
+  // 3. BRASIL
+  {
+    name: '🇧🇷 Brasil',
+    draw(ctx) {
+      const s = 512;
+      // Green circle bg
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 240, 0, Math.PI * 2);
+      const gr = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 240);
+      gr.addColorStop(0, '#009c3b');
+      gr.addColorStop(1, '#006b28');
+      ctx.fillStyle = gr;
+      ctx.fill();
+
+      // Yellow diamond
+      ctx.save();
+      ctx.translate(s/2, s/2);
+      ctx.beginPath();
+      ctx.moveTo(0, -170);
+      ctx.lineTo(200, 0);
+      ctx.lineTo(0, 170);
+      ctx.lineTo(-200, 0);
+      ctx.closePath();
+      ctx.fillStyle = '#FFDF00';
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Blue circle
+      ctx.beginPath();
+      ctx.arc(0, 0, 105, 0, Math.PI * 2);
+      ctx.fillStyle = '#002776';
+      ctx.fill();
+
+      // White band across circle
+      ctx.save();
+      ctx.clip();
+      ctx.beginPath();
+      ctx.arc(0, 0, 105, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(-130, -18, 260, 36);
+      ctx.restore();
+
+      // ORDEM E PROGRESSO text
+      ctx.font = 'bold 14px Arial';
+      ctx.fillStyle = '#002776';
+      ctx.textAlign = 'center';
+      ctx.fillText('ORDEM E PROGRESSO', 0, 5);
+
+      // Stars on blue
+      ctx.fillStyle = '#ffffff';
+      const starPositions = [
+        [0,-72],[50,-52],[68,-14],[57,30],[20,65],
+        [-20,65],[-57,30],[-68,-14],[-50,-52],
+        [26,-28],[-26,-28],[0,-6]
+      ];
+      starPositions.forEach(([sx,sy]) => {
+        drawStar(ctx, sx, sy, 4, 9, 5);
+      });
+
+      ctx.restore();
+
+      // "BRASIL" text
+      ctx.font = 'bold 72px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#006b28';
+      ctx.lineWidth = 8;
+      ctx.strokeText('BRASIL', s/2, s - 30);
+      const tg = ctx.createLinearGradient(s/2-150, 0, s/2+150, 0);
+      tg.addColorStop(0, '#FFDF00');
+      tg.addColorStop(1, '#fff176');
+      ctx.fillStyle = tg;
+      ctx.fillText('BRASIL', s/2, s - 30);
+    }
+  },
+
+  // 4. QUE GOLAÇO!
+  {
+    name: '🔥 Que Golaço!',
+    draw(ctx) {
+      const s = 512;
+      // Dark dramatic bg
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 300);
+      bg.addColorStop(0, '#ff6600');
+      bg.addColorStop(0.4, '#cc2200');
+      bg.addColorStop(1, 'rgba(80,0,0,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 300, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Flame-like shapes
+      ctx.save();
+      ctx.translate(s/2, s/2 + 80);
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        ctx.save();
+        ctx.rotate(a);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(40, -60, 10, -160, 0, -200);
+        ctx.bezierCurveTo(-10, -160, -40, -60, 0, 0);
+        ctx.fillStyle = `rgba(255,${100 + i * 15},0,0.4)`;
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // Ball
+      drawBall(ctx, s/2 + 60, s/2 + 50, 65);
+
+      // Speed lines
+      ctx.strokeStyle = 'rgba(255,200,0,0.6)';
+      ctx.lineWidth = 3;
+      for (let i = 0; i < 8; i++) {
+        const y = s/2 - 20 + i * 15;
+        ctx.beginPath();
+        ctx.moveTo(30, y);
+        ctx.lineTo(180, y - (i - 4) * 3);
+        ctx.stroke();
+      }
+
+      // Text
+      ctx.save();
+      ctx.translate(s/2, s/2 - 100);
+      ctx.rotate(-0.1);
+      ctx.font = 'bold 80px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#4a0000';
+      ctx.lineWidth = 8;
+      ctx.strokeText('QUE', 0, 0);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('QUE', 0, 0);
+      ctx.strokeText('GOLAÇO!', 0, 78);
+      ctx.fillStyle = '#ffdd00';
+      ctx.fillText('GOLAÇO!', 0, 78);
+      ctx.restore();
+    }
+  },
+
+  // 5. VAI BRASIL
+  {
+    name: '📣 Vai Brasil!',
+    draw(ctx) {
+      const s = 512;
+      // Crowd/stadium atmosphere
+      const bg = ctx.createLinearGradient(0, 0, 0, s);
+      bg.addColorStop(0, '#001f5c');
+      bg.addColorStop(0.5, '#003399');
+      bg.addColorStop(1, '#00aa44');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Confetti dots
+      const colors = ['#FFDF00','#009c3b','#ffffff','#ff6600','#ff0000'];
+      for (let i = 0; i < 60; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const d = 60 + Math.random() * 200;
+        const x = s/2 + Math.cos(a) * d;
+        const y = s/2 + Math.sin(a) * d;
+        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+        ctx.beginPath();
+        ctx.ellipse(x, y, 6, 10, a, 0, Math.PI*2);
+        ctx.fill();
+      }
+
+      // Megaphone emoji-style
+      ctx.font = '100px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('📣', s/2 - 80, s/2 + 20);
+
+      // Text
+      ctx.font = 'bold 90px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#003300';
+      ctx.lineWidth = 8;
+      ctx.strokeText('VAI', s/2 + 60, s/2 - 40);
+      ctx.fillStyle = '#FFDF00';
+      ctx.fillText('VAI', s/2 + 60, s/2 - 40);
+
+      ctx.font = 'bold 72px Arial Black, Arial';
+      ctx.strokeText('BRASIL!', s/2, s/2 + 50);
+      ctx.fillStyle = '#009c3b';
+      ctx.fillText('BRASIL!', s/2, s/2 + 50);
+
+      ctx.font = 'bold 36px Arial';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('⭐ COPA 2026 ⭐', s/2, s - 30);
+    }
+  },
+
+  // 6. Bola Voando
+  {
+    name: '⚽ Bola no Ar!',
+    draw(ctx) {
+      const s = 512;
+      // Sky gradient
+      const sky = ctx.createLinearGradient(0, 0, 0, s);
+      sky.addColorStop(0, '#87CEEB');
+      sky.addColorStop(0.6, '#b0e0ff');
+      sky.addColorStop(1, '#e8f8e0');
+      ctx.fillStyle = sky;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Clouds
+      function drawCloud(cx, cy, r) {
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx + r * 0.8, cy + r * 0.2, r * 0.75, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx - r * 0.6, cy + r * 0.3, r * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      drawCloud(120, 130, 45);
+      drawCloud(360, 100, 35);
+      drawCloud(280, 380, 30);
+
+      // Trail
+      ctx.strokeStyle = 'rgba(100,100,100,0.3)';
+      ctx.lineWidth = 4;
+      ctx.setLineDash([8, 12]);
+      ctx.beginPath();
+      ctx.moveTo(100, 380);
+      ctx.bezierCurveTo(150, 200, 280, 150, s/2, s/2 - 60);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Ball big
+      drawBall(ctx, s/2 + 40, s/2 - 50, 110);
+
+      // Speed stars
+      ctx.fillStyle = '#FFD700';
+      [[80,300],[130,260],[90,220]].forEach(([x,y]) => {
+        drawStar(ctx, x, y, 5, 12, 4);
+      });
+
+      // Text below
+      ctx.font = 'bold 52px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#003';
+      ctx.lineWidth = 6;
+      ctx.strokeText('COPA 2026! ⚽', s/2, s - 25);
+      ctx.fillStyle = '#005500';
+      ctx.fillText('COPA 2026! ⚽', s/2, s - 25);
+    }
+  },
+
+  // 7. CAMISA 10
+  {
+    name: '👕 Camisa 10',
+    draw(ctx) {
+      const s = 512;
+      // Yellow+green bg
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 270);
+      bg.addColorStop(0, '#fff176');
+      bg.addColorStop(0.7, '#FFDF00');
+      bg.addColorStop(1, 'rgba(0,120,60,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 270, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Jersey shape
+      ctx.save();
+      ctx.translate(s/2, s/2 - 30);
+      const jg = ctx.createLinearGradient(-120, -140, 120, 140);
+      jg.addColorStop(0, '#009c3b');
+      jg.addColorStop(1, '#007030');
+      ctx.fillStyle = jg;
+
+      // Body
+      ctx.beginPath();
+      ctx.moveTo(-90, -110);
+      // Left sleeve
+      ctx.lineTo(-140, -80);
+      ctx.lineTo(-120, -20);
+      ctx.lineTo(-80, -30);
+      // Bottom left
+      ctx.lineTo(-80, 140);
+      ctx.lineTo(80, 140);
+      // Bottom right
+      ctx.lineTo(80, -30);
+      ctx.lineTo(120, -20);
+      ctx.lineTo(140, -80);
+      // Right sleeve
+      ctx.lineTo(90, -110);
+      // Collar right
+      ctx.arcTo(40, -120, 0, -100, 30);
+      // Collar left
+      ctx.arcTo(-40, -120, -90, -110, 30);
+      ctx.closePath();
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = 15;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Green stripe accent
+      ctx.strokeStyle = '#FFDF00';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+
+      // Number 10
+      ctx.font = 'bold 130px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFDF00';
+      ctx.strokeStyle = '#004a1c';
+      ctx.lineWidth = 6;
+      ctx.strokeText('10', 0, 80);
+      ctx.fillText('10', 0, 80);
+
+      ctx.restore();
+
+      // "CRAQUE" label
+      ctx.font = 'bold 56px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#003300';
+      ctx.lineWidth = 6;
+      ctx.strokeText('CRAQUE!', s/2, s - 20);
+      ctx.fillStyle = '#8B0000';
+      ctx.fillText('CRAQUE!', s/2, s - 20);
+    }
+  },
+
+  // 8. COPA 2026 LOGO-STYLE
+  {
+    name: '🌎 Copa 2026',
+    draw(ctx) {
+      const s = 512;
+      // Dark bg circle
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 260);
+      bg.addColorStop(0, '#1a1a4e');
+      bg.addColorStop(0.6, '#0d0d33');
+      bg.addColorStop(1, 'rgba(0,0,20,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Stars ring
+      ctx.fillStyle = '#FFD700';
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+        const rx = s/2 + Math.cos(a) * 210;
+        const ry = s/2 + Math.sin(a) * 210;
+        drawStar(ctx, rx, ry, 6, 14, 5);
+      }
+
+      // Globe outline
+      ctx.save();
+      ctx.translate(s/2, s/2 - 20);
+      ctx.beginPath();
+      ctx.arc(0, 0, 130, 0, Math.PI * 2);
+      const gg = ctx.createLinearGradient(-130, -130, 130, 130);
+      gg.addColorStop(0, '#3a86ff');
+      gg.addColorStop(1, '#1a3a8f');
+      ctx.fillStyle = gg;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 2;
+
+      // Latitude lines
+      [-60, 0, 60].forEach(lat => {
+        const r = Math.cos((lat * Math.PI) / 180) * 130;
+        const y = Math.sin((lat * Math.PI) / 180) * 130;
+        ctx.beginPath();
+        ctx.ellipse(0, y, r, r * 0.25, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      // Meridian
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 40, 130, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 130, 40, Math.PI / 2, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Land masses (simplified)
+      ctx.fillStyle = '#2ecc71';
+      ctx.beginPath();
+      ctx.ellipse(-40, -20, 30, 50, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(20, 30, 20, 40, -0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(70, -40, 35, 25, 0.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+
+      // Ball on globe
+      drawBall(ctx, s/2 + 80, s/2 - 100, 45);
+
+      // Text
+      ctx.font = 'bold 64px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#000033';
+      ctx.lineWidth = 7;
+      ctx.strokeText('COPA 2026', s/2, s - 40);
+      const tg = ctx.createLinearGradient(s/2 - 200, 0, s/2 + 200, 0);
+      tg.addColorStop(0, '#FFD700');
+      tg.addColorStop(0.5, '#fff9c4');
+      tg.addColorStop(1, '#FFD700');
+      ctx.fillStyle = tg;
+      ctx.fillText('COPA 2026', s/2, s - 40);
+
+      ctx.font = 'bold 30px Arial';
+      ctx.fillStyle = '#87CEEB';
+      ctx.fillText('EUA · MEX · CAN', s/2, s - 5);
+    }
+  },
+
+  // 9. PENTACAMPEÃO
+  {
+    name: '⭐ Pentacampeão',
+    draw(ctx) {
+      const s = 512;
+      // Gold radial bg
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 270);
+      bg.addColorStop(0, '#fffde7');
+      bg.addColorStop(0.5, '#FFD700');
+      bg.addColorStop(1, 'rgba(200,130,0,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 270, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 5 big stars
+      ctx.fillStyle = '#FFD700';
+      ctx.strokeStyle = '#b8860b';
+      ctx.lineWidth = 3;
+      for (let i = 0; i < 5; i++) {
+        const a = (i / 5) * Math.PI * 2 - Math.PI / 2;
+        const sx = s/2 + Math.cos(a) * 130;
+        const sy = s/2 + Math.sin(a) * 130 - 30;
+        ctx.fillStyle = '#FFD700';
+        drawStar(ctx, sx, sy, 22, 48, 5);
+        ctx.strokeStyle = '#b8860b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        // re-draw for stroke
+        for (let j = 0; j < 10; j++) {
+          const ba = (j * Math.PI) / 5 - Math.PI / 2;
+          const r = j % 2 === 0 ? 48 : 22;
+          const px = sx + Math.cos(ba) * r;
+          const py = sy + Math.sin(ba) * r;
+          j === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+
+      // Trophy small in center
+      drawTrophy(ctx, s/2, s/2 - 30, 0.85);
+
+      // Text
+      ctx.font = 'bold 52px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#7a4800';
+      ctx.lineWidth = 6;
+      ctx.strokeText('PENTACAMPEÃO!', s/2, s - 35);
+      ctx.fillStyle = '#4a0000';
+      ctx.fillText('PENTACAMPEÃO!', s/2, s - 35);
+
+      ctx.font = 'bold 28px Arial';
+      ctx.fillStyle = '#555';
+      ctx.fillText('🇧🇷 BRASIL 🇧🇷', s/2, s - 4);
+    }
+  },
+
+  // 10. TORCIDA UNIDA
+  {
+    name: '🎉 Torcida!',
+    draw(ctx) {
+      const s = 512;
+      // Festive bg
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 270);
+      bg.addColorStop(0, '#ff5722');
+      bg.addColorStop(0.4, '#e91e63');
+      bg.addColorStop(1, 'rgba(100,0,80,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 270, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Confetti
+      const confColors = ['#FFD700','#00E676','#40C4FF','#FF6D00','#FFFFFF','#FF4081'];
+      for (let i = 0; i < 80; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const d = 30 + Math.random() * 230;
+        const x = s/2 + Math.cos(a) * d;
+        const y = s/2 + Math.sin(a) * d;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(Math.random() * Math.PI);
+        ctx.fillStyle = confColors[Math.floor(Math.random() * confColors.length)];
+        ctx.fillRect(-5, -9, 10, 18);
+        ctx.restore();
+      }
+
+      // Big emojis
+      ctx.font = '90px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🎉', s/2 - 120, s/2 - 60);
+      ctx.fillText('⚽', s/2 + 100, s/2 - 20);
+      ctx.fillText('🏆', s/2, s/2 + 80);
+
+      // Text
+      ctx.font = 'bold 76px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#4a0030';
+      ctx.lineWidth = 8;
+      ctx.strokeText('TORCIDA', s/2, s/2 - 130);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText('TORCIDA', s/2, s/2 - 130);
+
+      ctx.font = 'bold 48px Arial Black, Arial';
+      ctx.strokeText('UNIDA! 💚💛', s/2, s/2 - 80);
+      ctx.fillStyle = '#FFFF00';
+      ctx.fillText('UNIDA! 💚💛', s/2, s/2 - 80);
+    }
+  },
+
+  // 11. VAR - Checando...
+  {
+    name: '📺 VAR',
+    draw(ctx) {
+      const s = 512;
+      // Blue tech bg
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 260);
+      bg.addColorStop(0, '#0d47a1');
+      bg.addColorStop(0.7, '#1565c0');
+      bg.addColorStop(1, 'rgba(5,20,80,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 260, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(100,180,255,0.2)';
+      ctx.lineWidth = 1;
+      for (let x = 20; x < s; x += 30) {
+        ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,s); ctx.stroke();
+      }
+      for (let y = 20; y < s; y += 30) {
+        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(s,y); ctx.stroke();
+      }
+
+      // TV/monitor shape
+      ctx.save();
+      ctx.translate(s/2, s/2 - 30);
+      roundRect(ctx, -160, -110, 320, 200, 18);
+      ctx.fillStyle = '#000a1f';
+      ctx.fill();
+      ctx.strokeStyle = '#42a5f5';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+
+      // Screen content
+      ctx.fillStyle = '#0d47a1';
+      roundRect(ctx, -145, -95, 290, 170, 10);
+      ctx.fill();
+
+      // VAR text on screen
+      ctx.font = 'bold 80px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#00e5ff';
+      ctx.fillText('VAR', 0, 50);
+
+      // Scanning line
+      ctx.strokeStyle = '#00e5ff';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([10,5]);
+      ctx.beginPath();
+      ctx.moveTo(-130, 0);
+      ctx.lineTo(130, 0);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Stand
+      ctx.fillStyle = '#37474f';
+      ctx.fillRect(-10, 90, 20, 40);
+      ctx.fillRect(-40, 130, 80, 14);
+      ctx.restore();
+
+      // Text
+      ctx.font = 'bold 54px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#001060';
+      ctx.lineWidth = 6;
+      ctx.strokeText('CHECANDO...', s/2, s - 40);
+      ctx.fillStyle = '#00e5ff';
+      ctx.fillText('CHECANDO...', s/2, s - 40);
+
+      ctx.font = 'bold 28px Arial';
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText('Por Favor Aguarde ⏳', s/2, s - 8);
+    }
+  },
+
+  // 12. FIM DE JOGO
+  {
+    name: '🔔 Fim de Jogo',
+    draw(ctx) {
+      const s = 512;
+      // Deep dark bg with glow
+      const bg = ctx.createRadialGradient(s/2, s/2, 0, s/2, s/2, 270);
+      bg.addColorStop(0, '#263238');
+      bg.addColorStop(0.6, '#1a1a2e');
+      bg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.arc(s/2, s/2, 270, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Scoreboard
+      ctx.save();
+      ctx.translate(s/2, s/2 - 30);
+      roundRect(ctx, -190, -130, 380, 220, 20);
+      const sbg = ctx.createLinearGradient(-190, -130, 190, 90);
+      sbg.addColorStop(0, '#1b2838');
+      sbg.addColorStop(1, '#0d1b2a');
+      ctx.fillStyle = sbg;
+      ctx.shadowColor = 'rgba(255,200,0,0.5)';
+      ctx.shadowBlur = 20;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#FFD700';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Score display
+      ctx.font = 'bold 30px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#aaa';
+      ctx.fillText('FINAL', 0, -80);
+
+      ctx.font = 'bold 28px Arial';
+      ctx.fillStyle = '#fff';
+      ctx.fillText('BRA  🆚  ARG', 0, -40);
+
+      ctx.font = 'bold 90px Arial Black, Arial';
+      ctx.fillStyle = '#FFD700';
+      ctx.fillText('3  ×  1', 0, 60);
+
+      ctx.font = '22px Arial';
+      ctx.fillStyle = '#aaa';
+      ctx.fillText("90' + 5'", 0, 90);
+
+      ctx.restore();
+
+      // Bell icon
+      ctx.font = '60px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🔔', s/2, 90);
+
+      // FIM text
+      ctx.font = 'bold 70px Arial Black, Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = '#111';
+      ctx.lineWidth = 7;
+      ctx.strokeText('FIM DE JOGO!', s/2, s - 20);
+      ctx.fillStyle = '#FF6D00';
+      ctx.fillText('FIM DE JOGO!', s/2, s - 20);
+    }
+  },
+];
+
+// ──────────────────────────────────────────────────────────
+// Render all stickers
+const grid = document.getElementById('grid');
+
+stickers.forEach((sticker, idx) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const preview = document.createElement('canvas');
+  preview.width = 512;
+  preview.height = 512;
+
+  const ctx = preview.getContext('2d');
+  // Transparent background (for WhatsApp sticker compatibility)
+  ctx.clearRect(0, 0, 512, 512);
+  try { sticker.draw(ctx); } catch(e) { console.error(sticker.name, e); }
+
+  card.innerHTML = `<h3>${sticker.name}</h3>`;
+  card.insertBefore(preview, card.firstChild);
+
+  const btn = document.createElement('button');
+  btn.className = 'btn';
+  btn.textContent = 'Baixar Figurinha';
+  btn.onclick = () => {
+    const link = document.createElement('a');
+    link.download = `figurinha-copa-2026-${idx+1}.png`;
+    link.href = preview.toDataURL('image/png');
+    link.click();
+  };
+  card.appendChild(btn);
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
