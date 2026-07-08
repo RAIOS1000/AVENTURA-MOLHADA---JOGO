@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1E88E5">
-<title>Aventura Molhada — Meu Roteiro</title>
+<meta name="theme-color" content="#F26A21">
+<title>Alpen Park — Meu Roteiro</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%231E88E5'/%3E%3Ctext y='92' x='64' font-size='72' text-anchor='middle'%3E%F0%9F%8C%8A%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%23F26A21'/%3E%3Ctext y='94' x='64' font-size='72' text-anchor='middle'%3E%F0%9F%8E%A2%3C/text%3E%3C/svg%3E">
 <style>
 :root{
-  --azul:#1E88E5; --azul-esc:#1565C0; --azul-claro:#64B5F6; --azul-bb:#E3F2FD;
-  --verde:#2E9E6B; --amarelo:#F5A623; --vermelho:#E5573D; --roxo:#7C4DFF;
-  --tinta:#0E2A47; --cinza:#5B6B7B; --cinza-cl:#8DA0B0;
-  --card:#ffffff; --fundo:#EAF4FD; --linha:#DCE9F3;
-  --sombra:0 4px 16px rgba(21,101,192,.10); --raio:16px;
+  --laranja:#F26A21; --laranja-esc:#D2541A; --laranja-cl:#FCE6D6; --laranja-bb:#FFF3EA;
+  --roxo:#6A3EA1; --azul:#3B6FE0; --verde:#2E9E6B; --vermelho:#E5573D; --amarelo:#F5A623;
+  --tinta:#3A2416; --cinza:#7A6A5E; --cinza-cl:#B4A599;
+  --card:#ffffff; --fundo:#FBF3EC; --linha:#EFE1D5;
+  --sombra:0 4px 16px rgba(210,84,26,.10); --raio:16px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
@@ -27,29 +27,30 @@ body{
 
 /* Cabeçalho */
 header{
-  background:linear-gradient(135deg,#1E88E5,#1565C0 70%,#0D47A1);
+  background:linear-gradient(135deg,#F58220,#E4571A 55%,#C8431A);
   color:#fff; padding:calc(14px + env(safe-area-inset-top)) 18px 16px;
   border-radius:0 0 24px 24px; box-shadow:var(--sombra);
   position:sticky; top:0; z-index:20;
 }
 .htop{display:flex;align-items:center;gap:12px}
-.hprog{flex:0 0 auto}
 .htitle{flex:1;min-width:0}
-.htitle h1{font-size:1.18rem;font-weight:800;letter-spacing:-.3px;line-height:1.1}
-.htitle p{font-size:.8rem;opacity:.9;margin-top:2px}
-.ring{transform:rotate(-90deg)}
-.ring-bg{stroke:rgba(255,255,255,.25)}
-.ring-fg{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.eyebrow{font-size:.66rem;font-weight:800;letter-spacing:.8px;opacity:.9;display:block}
+.htitle h1{font-size:1.25rem;font-weight:800;letter-spacing:-.3px;line-height:1.1;margin-top:1px}
+.htitle p{font-size:.8rem;opacity:.92;margin-top:2px}
 .ringwrap{position:relative;width:60px;height:60px;display:grid;place-items:center}
+.ring{transform:rotate(-90deg)}
+.ring-bg{stroke:rgba(255,255,255,.28)}
+.ring-fg{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
 .ringtxt{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:.92rem}
-.hbtn{background:rgba(255,255,255,.16);border:none;color:#fff;font-size:1.05rem;
+.hbtn{background:rgba(255,255,255,.18);border:none;color:#fff;font-size:1.05rem;
   width:38px;height:38px;border-radius:12px;cursor:pointer;display:grid;place-items:center}
-.hbtn:active{background:rgba(255,255,255,.3)}
+.hbtn:active{background:rgba(255,255,255,.32)}
+
+.section{padding:16px 14px 0}
+.slabel{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--cinza);margin:0 4px 8px;display:flex;align-items:center;gap:6px}
 
 /* Lotação */
-.section{padding:16px 14px 0}
-.slabel{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
-  color:var(--cinza);margin:0 4px 8px;display:flex;align-items:center;gap:6px}
 .crowd{display:flex;gap:6px;background:#fff;padding:5px;border-radius:14px;box-shadow:var(--sombra)}
 .crowd button{flex:1;border:none;background:transparent;padding:9px 4px;border-radius:10px;
   font-size:.78rem;font-weight:700;color:var(--cinza);cursor:pointer;line-height:1.15;transition:.15s}
@@ -61,7 +62,7 @@ header{
 .crowd button.c3[aria-pressed=true]{background:var(--vermelho)}
 
 /* Sugestões */
-.sugg{background:linear-gradient(135deg,#fff,#F3F9FF);border:1.5px solid var(--linha);
+.sugg{background:linear-gradient(135deg,#fff,#FFF6EF);border:1.5px solid var(--linha);
   border-radius:var(--raio);box-shadow:var(--sombra);padding:14px;margin-top:6px}
 .sugg h2{font-size:1rem;font-weight:800;display:flex;align-items:center;gap:7px;margin-bottom:2px}
 .sugg .hint{font-size:.78rem;color:var(--cinza);margin-bottom:10px}
@@ -69,25 +70,47 @@ header{
   background:#fff;border:1px solid var(--linha);margin-top:8px;cursor:pointer;transition:.15s}
 .pick:active{transform:scale(.985)}
 .pick .rank{flex:0 0 26px;height:26px;border-radius:8px;display:grid;place-items:center;
-  font-weight:800;font-size:.85rem;color:#fff;background:var(--azul)}
-.pick:nth-child(2) .rank{background:var(--amarelo)}
+  font-weight:800;font-size:.85rem;color:#fff;background:var(--laranja)}
+.pick:nth-child(3) .rank{background:var(--roxo)}
+.pick:nth-child(4) .rank{background:var(--azul)}
 .pick .emo{font-size:1.5rem;flex:0 0 auto}
 .pick .pinfo{flex:1;min-width:0}
 .pick .pinfo b{font-size:.95rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pick .pinfo span{font-size:.76rem;color:var(--cinza)}
-.pick .go{flex:0 0 auto;background:var(--azul-bb);color:var(--azul-esc);font-weight:700;
+.pick .go{flex:0 0 auto;background:var(--laranja-bb);color:var(--laranja-esc);font-weight:800;
   font-size:.74rem;padding:6px 11px;border-radius:999px;white-space:nowrap}
 .allDone{text-align:center;padding:14px 6px}
 .allDone .big{font-size:2.2rem}
-.allDone p{font-weight:700;margin-top:4px}
+.allDone p{font-weight:800;margin-top:4px}
 .allDone small{color:var(--cinza)}
+
+/* Passaportes */
+.passtoggle{width:100%;background:#fff;border:1.5px solid var(--linha);border-radius:var(--raio);
+  box-shadow:var(--sombra);padding:13px 14px;margin-top:12px;display:flex;align-items:center;gap:9px;
+  cursor:pointer;font-size:.92rem;font-weight:800;color:var(--tinta)}
+.passtoggle .arw{margin-left:auto;transition:.2s;color:var(--cinza-cl)}
+.passtoggle[aria-expanded=true] .arw{transform:rotate(180deg)}
+.passbody{display:none;margin-top:9px;flex-direction:column;gap:9px}
+.passbody.open{display:flex}
+.pass{background:#fff;border:1.5px solid var(--linha);border-radius:var(--raio);
+  box-shadow:var(--sombra);padding:13px 14px;border-left:5px solid var(--laranja)}
+.pass.kids{border-left-color:var(--roxo)}
+.pass-top{display:flex;align-items:center;gap:8px}
+.pass-top b{font-size:.98rem;flex:1}
+.pass-price{background:var(--laranja);color:#fff;font-weight:800;font-size:.9rem;padding:4px 11px;border-radius:999px}
+.pass.kids .pass-price{background:var(--roxo)}
+.pass-sub{font-size:.76rem;color:var(--cinza);margin:5px 0 8px}
+.pass-list{font-size:.8rem;line-height:1.5;color:var(--tinta)}
+.pass-save{margin-top:8px;font-size:.82rem;font-weight:800;color:var(--verde);
+  background:#E9F7EF;padding:7px 10px;border-radius:9px}
+.pass-note{font-size:.72rem;color:var(--cinza-cl);margin-top:9px;padding:0 2px;line-height:1.4}
 
 /* Filtros */
 .filters{display:flex;gap:7px;overflow-x:auto;padding:14px 14px 4px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;border:1.5px solid var(--linha);background:#fff;color:var(--cinza);
-  padding:7px 13px;border-radius:999px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
-.chip[aria-pressed=true]{background:var(--azul);border-color:var(--azul);color:#fff}
+  padding:7px 13px;border-radius:999px;font-size:.82rem;font-weight:800;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--laranja);border-color:var(--laranja);color:#fff}
 .chip .n{opacity:.65;font-weight:600;margin-left:3px}
 
 /* Lista */
@@ -105,35 +128,33 @@ header{
 .cbody{flex:1;min-width:0}
 .cbody b{font-size:.97rem;font-weight:700;display:block;line-height:1.2}
 .cmeta{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;align-items:center}
-.tag{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;line-height:1.5}
+.tag{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px;line-height:1.5}
 .tag.tipo{color:#fff}
-.dots{font-size:.6rem;letter-spacing:1px;color:var(--vermelho)}
+.preco{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px;background:#EDE7F5;color:var(--roxo)}
 .wait{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px;line-height:1.5}
 .wait.w0{background:#E3F6EC;color:#1E8A57}
 .wait.w1{background:#FFF6E0;color:#C77A00}
 .wait.w2{background:#FFEAE0;color:#D2542E}
 .wait.w3{background:#FBE0E0;color:#C42B2B}
-.altura{font-size:.68rem;font-weight:700;color:var(--cinza);background:#EEF3F8;padding:2px 8px;border-radius:999px}
+.altura{font-size:.68rem;font-weight:700;color:var(--cinza);background:#F1EAE3;padding:2px 8px;border-radius:999px}
 .cmenu{flex:0 0 auto;background:none;border:none;color:var(--cinza-cl);font-size:1.3rem;
   padding:4px 6px;cursor:pointer;border-radius:8px;line-height:1}
-.cmenu:active{background:#EEF3F8}
+.cmenu:active{background:#F1EAE3}
 
-/* Botão adicionar (FAB) */
 .fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;
-  background:linear-gradient(135deg,#1E88E5,#1565C0);color:#fff;border:none;
+  background:linear-gradient(135deg,#F58220,#D2541A);color:#fff;border:none;
   height:56px;padding:0 20px;border-radius:999px;font-size:.95rem;font-weight:800;
-  box-shadow:0 8px 22px rgba(21,101,192,.4);cursor:pointer;display:flex;align-items:center;gap:8px}
+  box-shadow:0 8px 22px rgba(210,84,26,.4);cursor:pointer;display:flex;align-items:center;gap:8px}
 .fab:active{transform:scale(.96)}
 
 .empty{text-align:center;color:var(--cinza);padding:36px 20px}
 .empty .big{font-size:2.4rem;margin-bottom:8px}
 
-/* Rodapé */
 footer{text-align:center;padding:8px 20px 20px;color:var(--cinza-cl);font-size:.76rem}
-footer a{color:var(--azul);text-decoration:none;font-weight:700}
+footer a{color:var(--laranja);text-decoration:none;font-weight:800}
 
 /* Modal */
-.overlay{position:fixed;inset:0;background:rgba(14,42,71,.5);z-index:40;
+.overlay{position:fixed;inset:0;background:rgba(58,36,22,.5);z-index:40;
   display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
 .overlay.open{display:flex}
 .sheet{background:#fff;width:100%;max-width:620px;border-radius:22px 22px 0 0;
@@ -143,23 +164,26 @@ footer a{color:var(--azul);text-decoration:none;font-weight:700}
 .sheet h3{font-size:1.15rem;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .sheet .sub{color:var(--cinza);font-size:.82rem;margin-bottom:16px}
 .field{margin-bottom:13px}
-.field label{display:block;font-size:.76rem;font-weight:700;color:var(--cinza);margin-bottom:5px}
+.field label{display:block;font-size:.76rem;font-weight:800;color:var(--cinza);margin-bottom:5px}
 .field input,.field select,.field textarea{width:100%;border:1.5px solid var(--linha);border-radius:11px;
   padding:11px 12px;font-size:.95rem;font-family:inherit;color:var(--tinta);background:#fff}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--azul)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--laranja)}
 .field textarea{resize:vertical;min-height:56px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .emopick{display:flex;flex-wrap:wrap;gap:6px}
 .emopick button{border:1.5px solid var(--linha);background:#fff;font-size:1.25rem;width:44px;height:44px;
   border-radius:11px;cursor:pointer}
-.emopick button[aria-pressed=true]{border-color:var(--azul);background:var(--azul-bb)}
+.emopick button[aria-pressed=true]{border-color:var(--laranja);background:var(--laranja-bb)}
 .sactions{display:flex;gap:10px;margin-top:8px}
 .btn{flex:1;border:none;border-radius:13px;padding:14px;font-size:.95rem;font-weight:800;cursor:pointer}
-.btn-primary{background:var(--azul);color:#fff}
-.btn-primary:active{background:var(--azul-esc)}
-.btn-ghost{background:#EEF3F8;color:var(--cinza)}
+.btn-primary{background:var(--laranja);color:#fff}
+.btn-primary:active{background:var(--laranja-esc)}
+.btn-ghost{background:#F1EAE3;color:var(--cinza)}
 .btn-danger{background:#FDECEA;color:var(--vermelho);flex:0 0 auto;padding:14px 18px}
+.stat{background:#FFF6EF;border:1px solid var(--linha);border-radius:11px;padding:11px 12px;
+  font-size:.84rem;color:var(--tinta);margin-bottom:10px;line-height:1.5}
+.stat b{color:var(--laranja-esc)}
 .hidden{display:none!important}
 </style>
 </head>
@@ -168,18 +192,17 @@ footer a{color:var(--azul);text-decoration:none;font-weight:700}
 
   <header>
     <div class="htop">
-      <div class="hprog">
-        <div class="ringwrap">
-          <svg class="ring" width="60" height="60" viewBox="0 0 60 60">
-            <circle class="ring-bg" cx="30" cy="30" r="25" fill="none" stroke-width="7"/>
-            <circle class="ring-fg" id="ringFg" cx="30" cy="30" r="25" fill="none" stroke-width="7"
-              stroke-dasharray="157" stroke-dashoffset="157"/>
-          </svg>
-          <div class="ringtxt" id="ringTxt">0%</div>
-        </div>
+      <div class="ringwrap">
+        <svg class="ring" width="60" height="60" viewBox="0 0 60 60">
+          <circle class="ring-bg" cx="30" cy="30" r="25" fill="none" stroke-width="7"/>
+          <circle class="ring-fg" id="ringFg" cx="30" cy="30" r="25" fill="none" stroke-width="7"
+            stroke-dasharray="157" stroke-dashoffset="157"/>
+        </svg>
+        <div class="ringtxt" id="ringTxt">0%</div>
       </div>
       <div class="htitle">
-        <h1>🌊 Meu Roteiro</h1>
+        <span class="eyebrow">🏔️ ALPEN PARK · CANELA</span>
+        <h1>Meu Roteiro</h1>
         <p id="subCount">0 de 0 atrações</p>
       </div>
       <button class="hbtn" id="btnMenu" title="Opções" aria-label="Opções">⋯</button>
@@ -198,124 +221,130 @@ footer a{color:var(--azul);text-decoration:none;font-weight:700}
 
   <div class="section">
     <div class="sugg" id="sugg"></div>
+
+    <button class="passtoggle" id="passToggle" aria-expanded="false">
+      🎟️ Passaportes &amp; economia <span class="arw">▾</span>
+    </button>
+    <div class="passbody" id="passBody"></div>
   </div>
 
   <div class="filters" id="filters"></div>
-
   <div class="list" id="list"></div>
 
   <footer>
-    Feito pra curtir o parque sem stress 💧 · <a href="jogo.html">Jogar Missão Molhada 🎯</a>
+    Curta o Alpen Park sem stress 🎢 · <a href="jogo.html">Jogar Missão Molhada 🎯</a>
   </footer>
 </div>
 
 <button class="fab" id="fab">＋ Atração</button>
 
-<!-- Modal editar/adicionar -->
-<div class="overlay" id="overlay">
-  <div class="sheet" id="sheet"></div>
-</div>
+<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
 
 <script>
 /* ============================================================
-   Aventura Molhada — Meu Roteiro
-   App offline de checklist + sugestão por lotação.
-   Dados 100% locais (localStorage). Sem servidor.
+   Alpen Park — Meu Roteiro
+   Checklist offline das atrações + sugestão por lotação
+   + comparativo de passaportes. Dados 100% locais (localStorage).
    ============================================================ */
 const STORE = 'aventura-molhada-v1';
-const SEED_VERSION = 1;
+const SEED_VERSION = 2;
 
-/* Tipos de atração: cor + rótulo + emoji padrão */
+/* Tipos de atração */
 const TIPOS = {
   radical:  {label:'Radical',  cor:'#E5573D', emoji:'🎢'},
-  familia:  {label:'Família',  cor:'#F5A623', emoji:'👨‍👩‍👧‍👦'},
-  infantil: {label:'Infantil', cor:'#7C4DFF', emoji:'🧒'},
-  aquatico: {label:'Aquático', cor:'#1E88E5', emoji:'🌊'},
-  relax:    {label:'Relax',    cor:'#2E9E6B', emoji:'🛟'},
+  aventura: {label:'Aventura', cor:'#2E9E6B', emoji:'🌳'},
+  familia:  {label:'Família',  cor:'#3B6FE0', emoji:'👨‍👩‍👧'},
+  kids:     {label:'Kids',     cor:'#7C4D9E', emoji:'🧒'},
 };
 
-/* Lista-semente (típica de parque aquático). TUDO editável.
-   Quando chegar a foto do parque, é só trocar esta lista.
-   int=intensidade, pop=popularidade, cap=capacidade/vazão (1-5) */
+/* Passaportes do Alpen Park (dados do painel) */
+const PASSES = [
+  {id:'park', nome:'Passaporte Alpen Park', preco:179, kids:false,
+   sub:'Repita quantas vezes quiser · para quem tem +1,30m'},
+  {id:'kids', nome:'Passaporte Alpen Kids', preco:95, kids:true,
+   sub:'Diversão garantida · de 0,80m a 1,29m'},
+];
+
+/* Atrações reais do Alpen Park.
+   int=intensidade, pop=popularidade, cap=capacidade/vazão (1-5).
+   altura/alturaMax em metros (0 = sem exigência).
+   preco = avulso individual (R$); precoKids quando houver.
+   passe = passaportes que incluem a atração. */
 const SEED = [
-  {nome:'Piscina de Ondas',        tipo:'aquatico', emoji:'🌊', int:2, pop:5, cap:5, altura:0,    desc:'Ondas artificiais pra galera toda. Vazão altíssima.'},
-  {nome:'Rio Lento',               tipo:'relax',    emoji:'🛟', int:1, pop:4, cap:5, altura:0,    desc:'Boiar no anel pela correnteza. Descanso perfeito.'},
-  {nome:'Kamikaze',                tipo:'radical',  emoji:'🚀', int:5, pop:5, cap:2, altura:1.40, desc:'Queda quase vertical. Adrenalina pura.'},
-  {nome:'Tornado / Funil',         tipo:'radical',  emoji:'🌀', int:5, pop:5, cap:2, altura:1.30, desc:'Boia gigante no funil. Vai e volta na parede.'},
-  {nome:'Toboágua Rampa',          tipo:'radical',  emoji:'🛝', int:4, pop:4, cap:3, altura:1.20, desc:'Descida rápida em rampa aberta.'},
-  {nome:'Toboágua Fechado',        tipo:'radical',  emoji:'🕳️', int:4, pop:4, cap:3, altura:1.20, desc:'No escuro, cheio de curvas. Surpresa!'},
-  {nome:'Half-Pipe',               tipo:'radical',  emoji:'🏂', int:4, pop:3, cap:2, altura:1.30, desc:'Sobe e desce na rampa em U.'},
-  {nome:'Boia Cross (raft)',       tipo:'familia',  emoji:'🛶', int:3, pop:4, cap:3, altura:1.10, desc:'Boia grande pra família toda descer junta.'},
-  {nome:'Toboágua Multipistas',    tipo:'familia',  emoji:'🏁', int:3, pop:4, cap:4, altura:1.10, desc:'Corrida lado a lado de barriga. Alta vazão.'},
-  {nome:'Balde Gigante',           tipo:'familia',  emoji:'🪣', int:2, pop:4, cap:4, altura:0,    desc:'Estrutura molhada com balde que vira. Muita diversão.'},
-  {nome:'Área Kids',               tipo:'infantil', emoji:'🧒', int:1, pop:3, cap:5, altura:0,    desc:'Piscina rasa e escorregadores pequenos pras crianças.'},
-  {nome:'Piscina de Trampolim',    tipo:'aquatico', emoji:'🤿', int:3, pop:3, cap:3, altura:1.20, desc:'Piscina funda com trampolins.'},
-  {nome:'Praia Rasa',              tipo:'aquatico', emoji:'🏖️', int:1, pop:3, cap:5, altura:0,    desc:'Borda de areia e água rasa pra relaxar.'},
-  {nome:'Bar Molhado',             tipo:'relax',    emoji:'🍹', int:1, pop:3, cap:4, altura:0,    desc:'Piscina com bar dentro d\'água (só maiores).'},
+  {nome:'Trenó',          tipo:'radical',  emoji:'🛷',  int:4, pop:5, cap:3, altura:1.30, preco:58, precoKids:30, passe:['park','kids'], desc:'Trenó de montanha descendo a serra — você controla a velocidade. Sozinho a partir de 1,30m; acompanhado 0,80m. Individual R$58 · Duplo R$80 · Kids R$30.'},
+  {nome:'Fogo do Dragão', tipo:'radical',  emoji:'🐉',  int:4, pop:5, cap:4, altura:1.30, preco:35, precoKids:null, passe:['park'], desc:'Montanha-russa temática. Altura mínima 1,30m. Individual R$35 · Duplo R$62.'},
+  {nome:'Torre',          tipo:'radical',  emoji:'🗼',  int:5, pop:4, cap:3, altura:1.30, preco:25, precoKids:null, passe:['park'], desc:'Torre de queda livre — aquele frio na barriga! Altura mínima 1,30m.'},
+  {nome:'Xerife 5D',      tipo:'familia',  emoji:'🤠',  int:2, pop:3, cap:4, altura:1.30, preco:32, precoKids:null, passe:['park'], desc:'Cinema 5D interativo de tiro ao alvo. Altura mínima 1,30m · peso máx. 150kg.'},
+  {nome:'Cine 4D',        tipo:'familia',  emoji:'🎬',  int:2, pop:3, cap:4, altura:1.30, preco:38, precoKids:22, passe:['park','kids'], desc:'Filme 4D com efeitos. Sozinho 1,30m; acompanhado 0,80m. Kids R$22.'},
+  {nome:'Bate-Bate',      tipo:'familia',  emoji:'🚗',  int:2, pop:4, cap:3, altura:1.30, preco:32, precoKids:15, passe:['park','kids'], desc:'Carrinhos de bate-bate. Condutor 1,30m; acompanhado 0,80m. Kids R$15.'},
+  {nome:'Arena Big Land', tipo:'familia',  emoji:'🕹️', int:1, pop:3, cap:5, altura:1.30, preco:40, precoKids:40, passe:['park','kids'], desc:'Arena de jogos e arcade. A partir de 0,80m acompanhado de um adulto pagante.'},
+  {nome:'Castelo Kids',   tipo:'kids',     emoji:'🏰',  int:1, pop:3, cap:5, altura:0.80, alturaMax:1.29, preco:32, precoKids:32, passe:['kids'], desc:'Piscina de bolinhas e brinquedão. De 0,80m a 1,29m, sempre com um adulto.'},
+  {nome:'Arvorismo',      tipo:'aventura', emoji:'🌳',  int:4, pop:4, cap:2, altura:1.50, preco:63, precoKids:null, passe:[], desc:'Circuito de aventura nas árvores. Altura mínima 1,50m · peso máx. 120kg. Não incluso nos passaportes.'},
+  {nome:'Tirolesa',       tipo:'aventura', emoji:'🧗',  int:4, pop:4, cap:2, altura:0,    preco:44, precoKids:null, passe:[], desc:'Deslize pelas tirolesas do parque. Peso de 20 a 120kg. Não incluso nos passaportes.'},
+  {nome:'Quadriciclo',    tipo:'aventura', emoji:'🏍️', int:4, pop:3, cap:2, altura:1.50, preco:null, precoKids:null, passe:[], desc:'Pilote um quadriciclo. Idade mínima 18 anos, CNH obrigatória, altura 1,50m, peso máx. 170kg. Consulte valores e disponibilidade.'},
 ];
 
 /* --------- Estado --------- */
 let state = load();
 
+function fresh(){ return {crowd:1, filter:'todos', passOpen:false, seed:SEED_VERSION, items:seedItems()}; }
+function seedItems(){ return SEED.map((a,i)=>({id:'s'+i, done:false, ...a})); }
 function load(){
   try{
     const raw = localStorage.getItem(STORE);
     if(raw){
       const s = JSON.parse(raw);
-      if(Array.isArray(s.items) && s.items.length) return s;
+      if(Array.isArray(s.items) && s.items.length){
+        if(s.seed === SEED_VERSION) return s;
+        return migrate(s);           // atualiza a lista oficial preservando o que dá
+      }
     }
   }catch(e){}
-  return {crowd:1, filter:'todos', seed:SEED_VERSION, items:seedItems()};
+  return fresh();
 }
-function seedItems(){
-  return SEED.map((a,i)=>({id:'s'+i+'_'+(a.nome.length), done:false, ...a}));
+/* Ao mudar a lista oficial: recria a semente, mantém os "feitos" por nome
+   e preserva atrações que o usuário adicionou (id começa com 'u'). */
+function migrate(old){
+  const feitos = {};
+  old.items.forEach(a=>{ if(a.done) feitos[norm(a.nome)] = true; });
+  const userAdded = old.items.filter(a=> String(a.id).startsWith('u'));
+  const seeded = seedItems().map(a=> ({...a, done: !!feitos[norm(a.nome)]}));
+  return {crowd: old.crowd ?? 1, filter:'todos', passOpen: !!old.passOpen,
+          seed:SEED_VERSION, items:[...seeded, ...userAdded]};
 }
+const norm = s => String(s).toLowerCase().trim();
 function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
 
-/* --------- Fila estimada por brinquedo ---------
-   Combina popularidade (puxa fila), lotação do parque (puxa fila)
-   e capacidade/vazão (reduz fila). Retorna 0..3. */
+/* --------- Fila estimada por brinquedo (0..3) --------- */
 function waitLevel(a){
   const raw = a.pop + state.crowd*1.3 - a.cap*1.1;
-  if(raw <= 1.4) return 0;      // Curta
-  if(raw <= 3.0) return 1;      // Média
-  if(raw <= 4.6) return 2;      // Longa
-  return 3;                     // Muito longa
+  if(raw <= 1.4) return 0;
+  if(raw <= 3.0) return 1;
+  if(raw <= 4.6) return 2;
+  return 3;
 }
 const WAIT_TXT = ['Fila curta','Fila média','Fila longa','Fila enorme'];
 
-/* --------- Motor de sugestão ---------
-   Estratégia:
-   • Parque tranquilo → aproveite os campeões: radicais/populares AGORA
-     (linhas curtas, pegue o que costuma lotar depois).
-   • Parque cheio/lotado → vá pros de alta vazão e relax
-     (piscina de ondas, rio lento, multipistas) e fuja das filas gigantes. */
+/* --------- Motor de sugestão --------- */
 function suggest(){
   const pend = state.items.filter(a=>!a.done);
   if(!pend.length) return [];
-  const c = state.crowd;                 // 0..3
-  const cheio = c/3;                      // 0..1 (quão lotado)
-  const calmo = 1 - cheio;
+  const cheio = state.crowd/3, calmo = 1-cheio;
   return pend.map(a=>{
     let s = 0;
-    // Quando lotado: priorize vazão e evite popularidade (fila)
-    s += a.cap * cheio * 2.2;
-    s -= a.pop * cheio * 1.6;
-    // Quando tranquilo: agarre os populares/radicais enquanto a fila é curta
-    s += a.pop * calmo * 1.8;
-    s += a.int * calmo * 0.9;
-    // Penalidade suave pela fila estimada atual
-    s -= waitLevel(a) * 0.8;
+    s += a.cap * cheio * 2.2;      // lotado → priorize alta vazão
+    s -= a.pop * cheio * 1.6;      // lotado → evite os mais concorridos
+    s += a.pop * calmo * 1.8;      // tranquilo → agarre os populares agora
+    s += a.int * calmo * 0.9;      // tranquilo → aproveite os radicais
+    s -= waitLevel(a) * 0.8;       // penaliza fila estimada atual
     return {a, s};
   }).sort((x,y)=>y.s-x.s).map(o=>o.a);
 }
-
-/* Frase de motivo pra cada sugestão */
 function motivo(a){
   const w = waitLevel(a);
   if(state.crowd>=2){
-    if(a.cap>=4 && w<=1) return 'Alta vazão — anda rápido mesmo cheio';
-    if(a.tipo==='relax'||a.tipo==='aquatico') return 'Refresca sem enfrentar fila enorme';
+    if(a.cap>=4 && w<=1) return 'Alta rotatividade — anda rápido';
+    if(a.tipo==='aventura') return 'Fica na área externa, longe da muvuca';
     if(w<=1) return 'A fila deve estar curta agora';
     return 'Boa opção pro momento';
   }else{
@@ -325,21 +354,29 @@ function motivo(a){
   }
 }
 
-/* --------- Render --------- */
+/* --------- Helpers de exibição --------- */
 const $ = s=>document.querySelector(s);
-const listEl=$('#list'), suggEl=$('#sugg'), filtersEl=$('#filters');
+const fmtM = m => Number(m).toFixed(2).replace('.',',');
+function alturaTxt(a){
+  if(a.alturaMax) return fmtM(a.altura)+'–'+fmtM(a.alturaMax)+'m';
+  if(a.altura>0) return '↕ ≥'+fmtM(a.altura)+'m';
+  return '';
+}
+const precoTxt = a => a.preco==null ? 'sob consulta' : 'R$'+a.preco;
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* --------- Render --------- */
+const listEl=$('#list'), suggEl=$('#sugg'), filtersEl=$('#filters'), passBody=$('#passBody');
 
 const FILTROS = [
   {key:'todos',label:'Todos'},
   {key:'pendentes',label:'A fazer'},
   {key:'feitos',label:'Feitos'},
   {key:'radical',label:'Radical'},
+  {key:'aventura',label:'Aventura'},
   {key:'familia',label:'Família'},
-  {key:'aquatico',label:'Aquático'},
-  {key:'relax',label:'Relax'},
-  {key:'infantil',label:'Infantil'},
+  {key:'kids',label:'Kids'},
 ];
-
 function matchFilter(a){
   const f = state.filter;
   if(f==='todos') return true;
@@ -347,46 +384,40 @@ function matchFilter(a){
   if(f==='feitos') return a.done;
   return a.tipo===f;
 }
+function countFilter(key){
+  return state.items.filter(a=>{
+    if(key==='todos') return true;
+    if(key==='pendentes') return !a.done;
+    if(key==='feitos') return a.done;
+    return a.tipo===key;
+  }).length;
+}
 
 function render(){
   const total = state.items.length;
   const feitos = state.items.filter(a=>a.done).length;
   const pct = total? Math.round(feitos/total*100):0;
 
-  // anel de progresso
   const C = 157;
   $('#ringFg').setAttribute('stroke-dashoffset', C - C*pct/100);
   $('#ringTxt').textContent = pct+'%';
   $('#subCount').textContent = feitos+' de '+total+' atrações';
 
-  // lotação
   document.querySelectorAll('#crowd button').forEach(b=>{
     b.setAttribute('aria-pressed', String(+b.dataset.crowd===state.crowd));
   });
 
-  // filtros (com contagem)
-  filtersEl.innerHTML = FILTROS.map(f=>{
-    let n = state.items.filter(a=>{
-      if(f.key==='todos') return true;
-      if(f.key==='pendentes') return !a.done;
-      if(f.key==='feitos') return a.done;
-      return a.tipo===f.key;
-    }).length;
-    return `<button class="chip" data-f="${f.key}" aria-pressed="${state.filter===f.key}">
-      ${f.label}<span class="n">${n}</span></button>`;
-  }).join('');
+  filtersEl.innerHTML = FILTROS.map(f=>
+    `<button class="chip" data-f="${f.key}" aria-pressed="${state.filter===f.key}">
+      ${f.label}<span class="n">${countFilter(f.key)}</span></button>`).join('');
 
-  // sugestões
   renderSugg();
+  renderPasses();
 
-  // lista
   const vis = state.items.filter(matchFilter);
-  if(!vis.length){
-    listEl.innerHTML = `<div class="empty"><div class="big">🔍</div>
-      Nada aqui neste filtro.<br>Toque em <b>Todos</b> pra ver tudo.</div>`;
-  }else{
-    listEl.innerHTML = vis.map(cardHTML).join('');
-  }
+  listEl.innerHTML = vis.length
+    ? vis.map(cardHTML).join('')
+    : `<div class="empty"><div class="big">🔍</div>Nada neste filtro.<br>Toque em <b>Todos</b> pra ver tudo.</div>`;
   save();
 }
 
@@ -394,7 +425,7 @@ function renderSugg(){
   const pend = state.items.filter(a=>!a.done);
   if(!pend.length){
     suggEl.innerHTML = `<div class="allDone"><div class="big">🏆</div>
-      <p>Você fez tudo!</p><small>Parabéns, roteiro completo. Bora relaxar. 🍹</small></div>`;
+      <p>Você fez tudo!</p><small>Roteiro completo no Alpen Park. Curta a vista da serra! 🏔️</small></div>`;
     return;
   }
   const top = suggest().slice(0,3);
@@ -411,10 +442,34 @@ function renderSugg(){
       </div>`).join('')}`;
 }
 
+function passInfo(p){
+  const items = state.items.filter(a=> Array.isArray(a.passe) && a.passe.includes(p.id));
+  const avulso = items.reduce((s,a)=>{
+    const v = p.kids && a.precoKids!=null ? a.precoKids : a.preco;
+    return s + (v||0);
+  },0);
+  return {items, avulso, save: avulso - p.preco};
+}
+function renderPasses(){
+  passBody.innerHTML = PASSES.map(p=>{
+    const info = passInfo(p);
+    const lista = info.items.map(a=>esc(a.nome)).join(' · ');
+    const economia = info.save>0
+      ? `<div class="pass-save">Avulso sairia R$${info.avulso} — economize R$${info.save} 💰 (e repete à vontade)</div>`
+      : `<div class="pass-sub">Avulso das inclusas: R$${info.avulso}. Vale se você repetir as atrações.</div>`;
+    return `<div class="pass ${p.kids?'kids':''}">
+      <div class="pass-top"><b>${p.nome}</b><span class="pass-price">R$${p.preco}</span></div>
+      <div class="pass-sub">${p.sub}</div>
+      <div class="pass-list">${lista}</div>
+      ${economia}
+    </div>`;
+  }).join('') + `<div class="pass-note">🌳 Arvorismo, Tirolesa e Quadriciclo são cobrados à parte (não entram nos passaportes). Pagamento em até 4x, parcela mín. R$100. Passaporte pessoal, válido por 1 dia.</div>`;
+}
+
 function cardHTML(a){
   const t = TIPOS[a.tipo];
   const w = waitLevel(a);
-  const dots = a.done? '' : `<span class="dots" title="Intensidade">${'●'.repeat(a.int)}${'○'.repeat(5-a.int)}</span>`;
+  const alt = alturaTxt(a);
   return `<div class="card ${a.done?'done':''}" data-id="${a.id}">
     <div class="check">✓</div>
     <div class="cemo">${a.emoji}</div>
@@ -423,20 +478,17 @@ function cardHTML(a){
       <div class="cmeta">
         <span class="tag tipo" style="background:${t.cor}">${t.label}</span>
         ${a.done? '' : `<span class="wait w${w}">${WAIT_TXT[w]}</span>`}
-        ${dots}
-        ${a.altura>0? `<span class="altura">↕ ${a.altura.toFixed(2).replace('.',',')}m</span>`:''}
+        <span class="preco">${precoTxt(a)}</span>
+        ${alt? `<span class="altura">${alt}</span>`:''}
       </div>
     </div>
     <button class="cmenu" data-menu="${a.id}" aria-label="Editar ${esc(a.nome)}">⋮</button>
   </div>`;
 }
 
-function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
 /* --------- Ações --------- */
 function toggle(id){
-  const a = state.items.find(x=>x.id===id);
-  if(!a) return;
+  const a = state.items.find(x=>x.id===id); if(!a) return;
   a.done = !a.done;
   if(a.done && navigator.vibrate) navigator.vibrate(18);
   render();
@@ -444,128 +496,113 @@ function toggle(id){
 function setCrowd(c){ state.crowd=c; render(); }
 function setFilter(f){ state.filter=f; render(); }
 
-/* --------- Modal (adicionar / editar / opções) --------- */
+/* --------- Modal --------- */
 const overlay=$('#overlay'), sheet=$('#sheet');
 function openSheet(html){ sheet.innerHTML=html; overlay.classList.add('open'); }
 function closeSheet(){ overlay.classList.remove('open'); }
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeSheet(); });
 
-const EMOJIS = ['🌊','🛟','🚀','🌀','🛝','🕳️','🏂','🛶','🏁','🪣','🧒','🤿','🏖️','🍹','💦','🌈','⚡','🐊','🐬','🦈','🏄','🤽','🎢','🎯'];
+const EMOJIS = ['🛷','🐉','🗼','🤠','🎬','🚗','🕹️','🏰','🌳','🧗','🏍️','🎢','🎡','🎠','🏔️','⛰️','🎯','🕶️','🎮','🚙','🪂','🎪','🍿','🎟️'];
 
 function editSheet(id){
-  const a = id? state.items.find(x=>x.id===id) : {nome:'',tipo:'aquatico',emoji:'💦',int:3,pop:3,cap:3,altura:0,desc:''};
+  const a = id? state.items.find(x=>x.id===id)
+    : {nome:'',tipo:'radical',emoji:'🎢',int:3,pop:3,cap:3,altura:0,preco:null,desc:''};
   const novo = !id;
   openSheet(`
     <h3>${novo?'➕ Nova atração':'✏️ Editar atração'}</h3>
-    <div class="sub">${novo?'Adicione um brinquedo do seu parque.':'Ajuste os detalhes desta atração.'}</div>
-    <div class="field">
-      <label>Nome</label>
-      <input id="f_nome" value="${esc(a.nome)}" placeholder="Ex.: Toboágua Radical" maxlength="40">
-    </div>
-    <div class="field">
-      <label>Emoji</label>
+    <div class="sub">${novo?'Adicione um brinquedo ao seu roteiro.':'Ajuste os detalhes desta atração.'}</div>
+    <div class="field"><label>Nome</label>
+      <input id="f_nome" value="${esc(a.nome)}" placeholder="Ex.: Roda-gigante" maxlength="40"></div>
+    <div class="field"><label>Emoji</label>
       <div class="emopick" id="f_emopick">
         ${EMOJIS.map(e=>`<button type="button" data-e="${e}" aria-pressed="${e===a.emoji}">${e}</button>`).join('')}
-      </div>
-    </div>
-    <div class="field">
-      <label>Tipo</label>
-      <select id="f_tipo">
-        ${Object.entries(TIPOS).map(([k,v])=>`<option value="${k}" ${k===a.tipo?'selected':''}>${v.emoji} ${v.label}</option>`).join('')}
-      </select>
+      </div></div>
+    <div class="row2">
+      <div class="field"><label>Tipo</label>
+        <select id="f_tipo">${Object.entries(TIPOS).map(([k,v])=>`<option value="${k}" ${k===a.tipo?'selected':''}>${v.emoji} ${v.label}</option>`).join('')}</select></div>
+      <div class="field"><label>Preço avulso (R$)</label>
+        <input id="f_preco" type="number" min="0" step="1" inputmode="numeric" value="${a.preco==null?'':a.preco}" placeholder="—"></div>
     </div>
     <div class="row3">
-      <div class="field"><label>Intensidade</label>
-        <select id="f_int">${lvlOpts(a.int)}</select></div>
-      <div class="field"><label>Popularidade</label>
-        <select id="f_pop">${lvlOpts(a.pop)}</select></div>
-      <div class="field"><label>Vazão/fila</label>
-        <select id="f_cap">${lvlOpts(a.cap)}</select></div>
+      <div class="field"><label>Intensidade</label><select id="f_int">${lvlOpts(a.int)}</select></div>
+      <div class="field"><label>Popular.</label><select id="f_pop">${lvlOpts(a.pop)}</select></div>
+      <div class="field"><label>Vazão</label><select id="f_cap">${lvlOpts(a.cap)}</select></div>
     </div>
-    <div class="field">
-      <label>Altura mínima (m) — 0 se não tiver</label>
-      <input id="f_altura" type="number" step="0.05" min="0" max="2.5" value="${a.altura||0}" inputmode="decimal">
-    </div>
-    <div class="field">
-      <label>Observação (opcional)</label>
-      <textarea id="f_desc" placeholder="Dica, ponto de referência...">${esc(a.desc||'')}</textarea>
-    </div>
+    <div class="field"><label>Altura mínima (m) — 0 se não tiver</label>
+      <input id="f_altura" type="number" step="0.05" min="0" max="2.5" value="${a.altura||0}" inputmode="decimal"></div>
+    <div class="field"><label>Observação (opcional)</label>
+      <textarea id="f_desc" placeholder="Dica, ponto de referência...">${esc(a.desc||'')}</textarea></div>
     <div class="sactions">
       ${novo?'':'<button class="btn btn-danger" id="f_del">🗑️</button>'}
       <button class="btn btn-ghost" id="f_cancel">Cancelar</button>
       <button class="btn btn-primary" id="f_save">Salvar</button>
-    </div>
-  `);
+    </div>`);
   let emoSel = a.emoji;
   sheet.querySelectorAll('#f_emopick button').forEach(b=>{
     b.onclick=()=>{ emoSel=b.dataset.e;
-      sheet.querySelectorAll('#f_emopick button').forEach(x=>x.setAttribute('aria-pressed', x===b));
-    };
+      sheet.querySelectorAll('#f_emopick button').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
   });
   $('#f_cancel').onclick=closeSheet;
-  const delBtn = $('#f_del'); if(delBtn) delBtn.onclick=()=>{ removeItem(id); closeSheet(); };
+  const delBtn=$('#f_del'); if(delBtn) delBtn.onclick=()=>{ removeItem(id); closeSheet(); };
   $('#f_save').onclick=()=>{
-    const nome = $('#f_nome').value.trim();
-    if(!nome){ $('#f_nome').focus(); return; }
-    const data = {
-      nome, emoji:emoSel, tipo:$('#f_tipo').value,
+    const nome=$('#f_nome').value.trim(); if(!nome){ $('#f_nome').focus(); return; }
+    const precoRaw=$('#f_preco').value.trim();
+    const data={ nome, emoji:emoSel, tipo:$('#f_tipo').value,
       int:+$('#f_int').value, pop:+$('#f_pop').value, cap:+$('#f_cap').value,
       altura:Math.max(0, parseFloat($('#f_altura').value)||0),
-      desc:$('#f_desc').value.trim(),
-    };
-    if(novo){ state.items.push({id:'u'+Date.now(), done:false, ...data}); }
-    else { Object.assign(a, data); }
+      preco: precoRaw===''? null : Math.max(0, parseInt(precoRaw,10)||0),
+      desc:$('#f_desc').value.trim() };
+    if(novo) state.items.push({id:'u'+Date.now(), done:false, precoKids:null, passe:[], ...data});
+    else Object.assign(a, data);
     closeSheet(); render();
   };
 }
 function lvlOpts(v){ return [1,2,3,4,5].map(n=>`<option value="${n}" ${n===v?'selected':''}>${n}</option>`).join(''); }
-
-function removeItem(id){
-  state.items = state.items.filter(x=>x.id!==id);
-  render();
-}
+function removeItem(id){ state.items = state.items.filter(x=>x.id!==id); render(); }
 
 function optionsSheet(){
-  const feitos = state.items.filter(a=>a.done).length;
+  const feitos = state.items.filter(a=>a.done);
+  const gasto = feitos.reduce((s,a)=>s+(a.preco||0),0);
+  const totalAvulso = state.items.reduce((s,a)=>s+(a.preco||0),0);
   openSheet(`
     <h3>⚙️ Opções</h3>
     <div class="sub">Seu roteiro fica salvo neste aparelho, mesmo offline.</div>
+    <div class="stat">🎢 Você já fez <b>${feitos.length}</b> atração(ões)${gasto?` — cerca de <b>R$${gasto}</b> em ingressos avulsos`:''}.<br>
+      💵 Fazer tudo avulso custaria <b>R$${totalAvulso}</b> (fora Quadriciclo/consulta).</div>
     <div class="sactions" style="flex-direction:column">
-      <button class="btn btn-ghost" id="o_uncheck">↺ Desmarcar tudo (${feitos} feitos)</button>
-      <button class="btn btn-ghost" id="o_reseed">🔄 Restaurar lista padrão do parque</button>
+      <button class="btn btn-ghost" id="o_uncheck">↺ Desmarcar tudo (${feitos.length} feitos)</button>
+      <button class="btn btn-ghost" id="o_reseed">🔄 Restaurar lista oficial do Alpen Park</button>
       <button class="btn btn-primary" id="o_close" style="margin-top:4px">Fechar</button>
     </div>
     <p style="font-size:.74rem;color:var(--cinza);margin-top:14px;text-align:center">
-      Dica: toque em ＋ pra adicionar os brinquedos reais do seu parque,
-      ou no ⋮ de cada cartão pra editar.
-    </p>
-  `);
+      Toque em ＋ pra adicionar atrações, ou no ⋮ de cada cartão pra editar.</p>`);
   $('#o_close').onclick=closeSheet;
   $('#o_uncheck').onclick=()=>{ if(confirm('Desmarcar todas as atrações?')){ state.items.forEach(a=>a.done=false); closeSheet(); render(); } };
-  $('#o_reseed').onclick=()=>{ if(confirm('Isso substitui a lista atual pela lista padrão e apaga suas edições. Continuar?')){
-    state.items = seedItems(); state.seed=SEED_VERSION; closeSheet(); render(); } };
+  $('#o_reseed').onclick=()=>{ if(confirm('Isso restaura a lista oficial e apaga suas edições. Continuar?')){
+    state.items=seedItems(); state.seed=SEED_VERSION; closeSheet(); render(); } };
 }
 
 /* --------- Eventos --------- */
-document.getElementById('crowd').addEventListener('click',e=>{
-  const b=e.target.closest('button[data-crowd]'); if(b) setCrowd(+b.dataset.crowd);
-});
-filtersEl.addEventListener('click',e=>{
-  const b=e.target.closest('button[data-f]'); if(b) setFilter(b.dataset.f);
-});
+$('#crowd').addEventListener('click',e=>{ const b=e.target.closest('button[data-crowd]'); if(b) setCrowd(+b.dataset.crowd); });
+filtersEl.addEventListener('click',e=>{ const b=e.target.closest('button[data-f]'); if(b) setFilter(b.dataset.f); });
 listEl.addEventListener('click',e=>{
   const menu=e.target.closest('[data-menu]');
   if(menu){ e.stopPropagation(); editSheet(menu.dataset.menu); return; }
-  const card=e.target.closest('[data-id]');
-  if(card) toggle(card.dataset.id);
+  const card=e.target.closest('[data-id]'); if(card) toggle(card.dataset.id);
 });
-suggEl.addEventListener('click',e=>{
-  const p=e.target.closest('[data-go]'); if(p) toggle(p.dataset.go);
-});
+suggEl.addEventListener('click',e=>{ const p=e.target.closest('[data-go]'); if(p) toggle(p.dataset.go); });
 $('#fab').addEventListener('click',()=>editSheet(null));
 $('#btnMenu').addEventListener('click',optionsSheet);
+$('#passToggle').addEventListener('click',()=>{
+  state.passOpen=!state.passOpen;
+  $('#passToggle').setAttribute('aria-expanded', state.passOpen);
+  passBody.classList.toggle('open', state.passOpen);
+  save();
+});
 
 render();
+$('#passToggle').setAttribute('aria-expanded', state.passOpen);
+passBody.classList.toggle('open', state.passOpen);
 
 /* --------- PWA: funciona offline no parque --------- */
 if('serviceWorker' in navigator){

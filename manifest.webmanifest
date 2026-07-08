@@ -1,17 +1,17 @@
 {
-  "name": "Aventura Molhada — Meu Roteiro",
+  "name": "Alpen Park — Meu Roteiro",
   "short_name": "Meu Roteiro",
-  "description": "Marque as atrações que já fez no parque aquático e receba sugestões de brinquedos conforme a lotação.",
+  "description": "Marque as atrações que já fez no Alpen Park e receba sugestões de brinquedos conforme a lotação, com preços e comparativo de passaportes.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#EAF4FD",
-  "theme_color": "#1E88E5",
+  "background_color": "#FBF3EC",
+  "theme_color": "#F26A21",
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231E88E5'/%3E%3Ctext y='368' x='256' font-size='300' text-anchor='middle'%3E%F0%9F%8C%8A%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%23F26A21'/%3E%3Ctext y='372' x='256' font-size='300' text-anchor='middle'%3E%F0%9F%8E%A2%3C/text%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
