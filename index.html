@@ -119,11 +119,21 @@ header{
   box-shadow:var(--sombra);padding:12px;display:flex;align-items:center;gap:12px;
   cursor:pointer;transition:.15s;position:relative;overflow:hidden}
 .card:active{transform:scale(.99)}
-.card.done{background:#F3FBF6;border-color:#C7EBD6}
+.card.done{background:linear-gradient(90deg,#E7F8EE,#F3FBF6);border-color:#BEE7CF;box-shadow:inset 5px 0 0 0 var(--verde),var(--sombra)}
 .card.done .cbody b{text-decoration:line-through;color:var(--cinza)}
-.check{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--cinza-cl);
-  display:grid;place-items:center;font-size:1rem;color:transparent;transition:.15s;background:#fff}
-.card.done .check{background:var(--verde);border-color:var(--verde);color:#fff}
+.card.done .cemo{opacity:.5}
+.check{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:2.5px solid var(--cinza-cl);
+  display:grid;place-items:center;font-size:1.05rem;font-weight:900;color:transparent;transition:.15s;background:#fff}
+.card.done .check{background:var(--verde);border-color:var(--verde);color:#fff;box-shadow:0 2px 8px rgba(46,158,107,.4)}
+.card.pop{animation:cardpop .4s ease}
+@keyframes cardpop{0%{transform:scale(.95)}45%{transform:scale(1.03)}100%{transform:scale(1)}}
+.card.pop .check{animation:chkpop .5s ease}
+@keyframes chkpop{0%{transform:scale(.2);opacity:.2}55%{transform:scale(1.35)}100%{transform:scale(1)}}
+.feito{background:var(--verde);color:#fff;font-weight:800;font-size:.72rem;padding:3px 11px;border-radius:999px;letter-spacing:.4px}
+.feitoTime{font-size:.72rem;color:#2E8B5C;font-weight:800}
+.tag.dim{opacity:.55}
+.confete{position:fixed;top:-16px;width:9px;height:15px;border-radius:2px;z-index:60;pointer-events:none;animation:fall 1.5s cubic-bezier(.3,.6,.5,1) forwards}
+@keyframes fall{0%{opacity:1}100%{transform:translateY(110vh) rotate(560deg);opacity:.1}}
 .cemo{flex:0 0 auto;font-size:1.7rem;width:30px;text-align:center}
 .cbody{flex:1;min-width:0}
 .cbody b{font-size:.97rem;font-weight:700;display:block;line-height:1.2}
@@ -286,6 +296,8 @@ const SEED = [
 
 /* --------- Estado --------- */
 let state = load();
+let lastPop = null;
+let wasComplete = state.items.length>0 && state.items.every(a=>a.done);
 
 function fresh(){ return {crowd:1, filter:'todos', passOpen:false, seed:SEED_VERSION, items:seedItems()}; }
 function seedItems(){ return SEED.map((a,i)=>({id:'s'+i, done:false, ...a})); }
@@ -401,7 +413,9 @@ function render(){
   const C = 157;
   $('#ringFg').setAttribute('stroke-dashoffset', C - C*pct/100);
   $('#ringTxt').textContent = pct+'%';
-  $('#subCount').textContent = feitos+' de '+total+' atrações';
+  $('#subCount').textContent = (total>0 && feitos===total)
+    ? '🎉 Tudo feito! Roteiro completo'
+    : feitos+' de '+total+' · faltam '+(total-feitos);
 
   document.querySelectorAll('#crowd button').forEach(b=>{
     b.setAttribute('aria-pressed', String(+b.dataset.crowd===state.crowd));
@@ -418,6 +432,10 @@ function render(){
   listEl.innerHTML = vis.length
     ? vis.map(cardHTML).join('')
     : `<div class="empty"><div class="big">🔍</div>Nada neste filtro.<br>Toque em <b>Todos</b> pra ver tudo.</div>`;
+  lastPop = null;
+  const complete = total>0 && feitos===total;
+  if(complete && !wasComplete) celebrate();
+  wasComplete = complete;
   save();
 }
 
@@ -468,30 +486,61 @@ function renderPasses(){
 
 function cardHTML(a){
   const t = TIPOS[a.tipo];
-  const w = waitLevel(a);
-  const alt = alturaTxt(a);
-  return `<div class="card ${a.done?'done':''}" data-id="${a.id}">
+  const pop = a.id===lastPop ? ' pop' : '';
+  let meta;
+  if(a.done){
+    meta = `<span class="feito">✓ FEITO</span>
+      <span class="feitoTime">${doneLabel(a)}</span>
+      <span class="tag tipo dim" style="background:${t.cor}">${t.label}</span>`;
+  }else{
+    const w = waitLevel(a), alt = alturaTxt(a);
+    meta = `<span class="tag tipo" style="background:${t.cor}">${t.label}</span>
+      <span class="wait w${w}">${WAIT_TXT[w]}</span>
+      <span class="preco">${precoTxt(a)}</span>
+      ${alt? `<span class="altura">${alt}</span>`:''}`;
+  }
+  return `<div class="card ${a.done?'done':''}${pop}" data-id="${a.id}">
     <div class="check">✓</div>
     <div class="cemo">${a.emoji}</div>
     <div class="cbody">
       <b>${esc(a.nome)}</b>
-      <div class="cmeta">
-        <span class="tag tipo" style="background:${t.cor}">${t.label}</span>
-        ${a.done? '' : `<span class="wait w${w}">${WAIT_TXT[w]}</span>`}
-        <span class="preco">${precoTxt(a)}</span>
-        ${alt? `<span class="altura">${alt}</span>`:''}
-      </div>
+      <div class="cmeta">${meta}</div>
     </div>
     <button class="cmenu" data-menu="${a.id}" aria-label="Editar ${esc(a.nome)}">⋮</button>
   </div>`;
+}
+
+/* Rótulo de quando a atração foi marcada */
+function doneLabel(a){
+  if(!a.doneAt) return 'concluída';
+  const d = new Date(a.doneAt), now = new Date();
+  const hh = String(d.getHours()).padStart(2,'0'), mm = String(d.getMinutes()).padStart(2,'0');
+  if(d.toDateString()===now.toDateString()) return 'feito às '+hh+':'+mm;
+  return 'feito '+String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
 }
 
 /* --------- Ações --------- */
 function toggle(id){
   const a = state.items.find(x=>x.id===id); if(!a) return;
   a.done = !a.done;
-  if(a.done && navigator.vibrate) navigator.vibrate(18);
+  if(a.done){ a.doneAt = Date.now(); lastPop = id; if(navigator.vibrate) navigator.vibrate(18); }
+  else { a.doneAt = null; lastPop = null; }
   render();
+}
+/* Comemoração ao concluir o roteiro inteiro */
+function celebrate(){
+  if(navigator.vibrate) navigator.vibrate([30,40,30,40,60]);
+  const cores=['#F26A21','#2E9E6B','#3B6FE0','#7C4D9E','#F5A623','#E5573D'];
+  for(let i=0;i<30;i++){
+    const d=document.createElement('div');
+    d.className='confete';
+    d.style.left=(4+Math.random()*92)+'vw';
+    d.style.background=cores[i%cores.length];
+    d.style.animationDelay=(Math.random()*0.25)+'s';
+    d.style.width=(7+Math.random()*6)+'px';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),1800);
+  }
 }
 function setCrowd(c){ state.crowd=c; render(); }
 function setFilter(f){ state.filter=f; render(); }
