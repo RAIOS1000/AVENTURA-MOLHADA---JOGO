@@ -1,203 +1,576 @@
-
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1E88E5">
+<title>Aventura Molhada — Meu Roteiro</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect width='128' height='128' rx='28' fill='%231E88E5'/%3E%3Ctext y='92' x='64' font-size='72' text-anchor='middle'%3E%F0%9F%8C%8A%3C/text%3E%3C/svg%3E">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body,#root{background:transparent}
-#g{display:flex;align-items:center;justify-content:center;padding:.75rem 0}
-canvas{border-radius:var(--border-radius-lg);display:block;width:100%;max-width:680px;height:auto;cursor:none;touch-action:none}
+:root{
+  --azul:#1E88E5; --azul-esc:#1565C0; --azul-claro:#64B5F6; --azul-bb:#E3F2FD;
+  --verde:#2E9E6B; --amarelo:#F5A623; --vermelho:#E5573D; --roxo:#7C4DFF;
+  --tinta:#0E2A47; --cinza:#5B6B7B; --cinza-cl:#8DA0B0;
+  --card:#ffffff; --fundo:#EAF4FD; --linha:#DCE9F3;
+  --sombra:0 4px 16px rgba(21,101,192,.10); --raio:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color:var(--tinta); background:var(--fundo);
+  padding-bottom:calc(88px + env(safe-area-inset-bottom));
+  overscroll-behavior-y:none;
+}
+.wrap{max-width:620px;margin:0 auto}
+
+/* Cabeçalho */
+header{
+  background:linear-gradient(135deg,#1E88E5,#1565C0 70%,#0D47A1);
+  color:#fff; padding:calc(14px + env(safe-area-inset-top)) 18px 16px;
+  border-radius:0 0 24px 24px; box-shadow:var(--sombra);
+  position:sticky; top:0; z-index:20;
+}
+.htop{display:flex;align-items:center;gap:12px}
+.hprog{flex:0 0 auto}
+.htitle{flex:1;min-width:0}
+.htitle h1{font-size:1.18rem;font-weight:800;letter-spacing:-.3px;line-height:1.1}
+.htitle p{font-size:.8rem;opacity:.9;margin-top:2px}
+.ring{transform:rotate(-90deg)}
+.ring-bg{stroke:rgba(255,255,255,.25)}
+.ring-fg{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
+.ringwrap{position:relative;width:60px;height:60px;display:grid;place-items:center}
+.ringtxt{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:.92rem}
+.hbtn{background:rgba(255,255,255,.16);border:none;color:#fff;font-size:1.05rem;
+  width:38px;height:38px;border-radius:12px;cursor:pointer;display:grid;place-items:center}
+.hbtn:active{background:rgba(255,255,255,.3)}
+
+/* Lotação */
+.section{padding:16px 14px 0}
+.slabel{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--cinza);margin:0 4px 8px;display:flex;align-items:center;gap:6px}
+.crowd{display:flex;gap:6px;background:#fff;padding:5px;border-radius:14px;box-shadow:var(--sombra)}
+.crowd button{flex:1;border:none;background:transparent;padding:9px 4px;border-radius:10px;
+  font-size:.78rem;font-weight:700;color:var(--cinza);cursor:pointer;line-height:1.15;transition:.15s}
+.crowd button .emo{display:block;font-size:1.05rem;margin-bottom:1px}
+.crowd button[aria-pressed=true]{color:#fff}
+.crowd button.c0[aria-pressed=true]{background:var(--verde)}
+.crowd button.c1[aria-pressed=true]{background:var(--amarelo)}
+.crowd button.c2[aria-pressed=true]{background:#F57C00}
+.crowd button.c3[aria-pressed=true]{background:var(--vermelho)}
+
+/* Sugestões */
+.sugg{background:linear-gradient(135deg,#fff,#F3F9FF);border:1.5px solid var(--linha);
+  border-radius:var(--raio);box-shadow:var(--sombra);padding:14px;margin-top:6px}
+.sugg h2{font-size:1rem;font-weight:800;display:flex;align-items:center;gap:7px;margin-bottom:2px}
+.sugg .hint{font-size:.78rem;color:var(--cinza);margin-bottom:10px}
+.pick{display:flex;align-items:center;gap:11px;padding:10px;border-radius:12px;
+  background:#fff;border:1px solid var(--linha);margin-top:8px;cursor:pointer;transition:.15s}
+.pick:active{transform:scale(.985)}
+.pick .rank{flex:0 0 26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  font-weight:800;font-size:.85rem;color:#fff;background:var(--azul)}
+.pick:nth-child(2) .rank{background:var(--amarelo)}
+.pick .emo{font-size:1.5rem;flex:0 0 auto}
+.pick .pinfo{flex:1;min-width:0}
+.pick .pinfo b{font-size:.95rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick .pinfo span{font-size:.76rem;color:var(--cinza)}
+.pick .go{flex:0 0 auto;background:var(--azul-bb);color:var(--azul-esc);font-weight:700;
+  font-size:.74rem;padding:6px 11px;border-radius:999px;white-space:nowrap}
+.allDone{text-align:center;padding:14px 6px}
+.allDone .big{font-size:2.2rem}
+.allDone p{font-weight:700;margin-top:4px}
+.allDone small{color:var(--cinza)}
+
+/* Filtros */
+.filters{display:flex;gap:7px;overflow-x:auto;padding:14px 14px 4px;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1.5px solid var(--linha);background:#fff;color:var(--cinza);
+  padding:7px 13px;border-radius:999px;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--azul);border-color:var(--azul);color:#fff}
+.chip .n{opacity:.65;font-weight:600;margin-left:3px}
+
+/* Lista */
+.list{padding:8px 14px 20px;display:flex;flex-direction:column;gap:9px}
+.card{background:var(--card);border:1.5px solid var(--linha);border-radius:var(--raio);
+  box-shadow:var(--sombra);padding:12px;display:flex;align-items:center;gap:12px;
+  cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.card:active{transform:scale(.99)}
+.card.done{background:#F3FBF6;border-color:#C7EBD6}
+.card.done .cbody b{text-decoration:line-through;color:var(--cinza)}
+.check{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--cinza-cl);
+  display:grid;place-items:center;font-size:1rem;color:transparent;transition:.15s;background:#fff}
+.card.done .check{background:var(--verde);border-color:var(--verde);color:#fff}
+.cemo{flex:0 0 auto;font-size:1.7rem;width:30px;text-align:center}
+.cbody{flex:1;min-width:0}
+.cbody b{font-size:.97rem;font-weight:700;display:block;line-height:1.2}
+.cmeta{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;align-items:center}
+.tag{font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:999px;line-height:1.5}
+.tag.tipo{color:#fff}
+.dots{font-size:.6rem;letter-spacing:1px;color:var(--vermelho)}
+.wait{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px;line-height:1.5}
+.wait.w0{background:#E3F6EC;color:#1E8A57}
+.wait.w1{background:#FFF6E0;color:#C77A00}
+.wait.w2{background:#FFEAE0;color:#D2542E}
+.wait.w3{background:#FBE0E0;color:#C42B2B}
+.altura{font-size:.68rem;font-weight:700;color:var(--cinza);background:#EEF3F8;padding:2px 8px;border-radius:999px}
+.cmenu{flex:0 0 auto;background:none;border:none;color:var(--cinza-cl);font-size:1.3rem;
+  padding:4px 6px;cursor:pointer;border-radius:8px;line-height:1}
+.cmenu:active{background:#EEF3F8}
+
+/* Botão adicionar (FAB) */
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;
+  background:linear-gradient(135deg,#1E88E5,#1565C0);color:#fff;border:none;
+  height:56px;padding:0 20px;border-radius:999px;font-size:.95rem;font-weight:800;
+  box-shadow:0 8px 22px rgba(21,101,192,.4);cursor:pointer;display:flex;align-items:center;gap:8px}
+.fab:active{transform:scale(.96)}
+
+.empty{text-align:center;color:var(--cinza);padding:36px 20px}
+.empty .big{font-size:2.4rem;margin-bottom:8px}
+
+/* Rodapé */
+footer{text-align:center;padding:8px 20px 20px;color:var(--cinza-cl);font-size:.76rem}
+footer a{color:var(--azul);text-decoration:none;font-weight:700}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(14,42,71,.5);z-index:40;
+  display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.overlay.open{display:flex}
+.sheet{background:#fff;width:100%;max-width:620px;border-radius:22px 22px 0 0;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;
+  animation:up .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet h3{font-size:1.15rem;font-weight:800;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sheet .sub{color:var(--cinza);font-size:.82rem;margin-bottom:16px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:.76rem;font-weight:700;color:var(--cinza);margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;border:1.5px solid var(--linha);border-radius:11px;
+  padding:11px 12px;font-size:.95rem;font-family:inherit;color:var(--tinta);background:#fff}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--azul)}
+.field textarea{resize:vertical;min-height:56px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.emopick{display:flex;flex-wrap:wrap;gap:6px}
+.emopick button{border:1.5px solid var(--linha);background:#fff;font-size:1.25rem;width:44px;height:44px;
+  border-radius:11px;cursor:pointer}
+.emopick button[aria-pressed=true]{border-color:var(--azul);background:var(--azul-bb)}
+.sactions{display:flex;gap:10px;margin-top:8px}
+.btn{flex:1;border:none;border-radius:13px;padding:14px;font-size:.95rem;font-weight:800;cursor:pointer}
+.btn-primary{background:var(--azul);color:#fff}
+.btn-primary:active{background:var(--azul-esc)}
+.btn-ghost{background:#EEF3F8;color:var(--cinza)}
+.btn-danger{background:#FDECEA;color:var(--vermelho);flex:0 0 auto;padding:14px 18px}
+.hidden{display:none!important}
 </style>
-<h2 class="sr-only">Jogo Missão Molhada — estoure balões com a pistola d'água antes do tempo acabar</h2>
-<div id="g"><canvas id="c"></canvas></div>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="htop">
+      <div class="hprog">
+        <div class="ringwrap">
+          <svg class="ring" width="60" height="60" viewBox="0 0 60 60">
+            <circle class="ring-bg" cx="30" cy="30" r="25" fill="none" stroke-width="7"/>
+            <circle class="ring-fg" id="ringFg" cx="30" cy="30" r="25" fill="none" stroke-width="7"
+              stroke-dasharray="157" stroke-dashoffset="157"/>
+          </svg>
+          <div class="ringtxt" id="ringTxt">0%</div>
+        </div>
+      </div>
+      <div class="htitle">
+        <h1>🌊 Meu Roteiro</h1>
+        <p id="subCount">0 de 0 atrações</p>
+      </div>
+      <button class="hbtn" id="btnMenu" title="Opções" aria-label="Opções">⋯</button>
+    </div>
+  </header>
+
+  <div class="section">
+    <div class="slabel">🌡️ Como está o parque agora?</div>
+    <div class="crowd" id="crowd" role="group" aria-label="Nível de lotação">
+      <button class="c0" data-crowd="0"><span class="emo">😎</span>Tranquilo</button>
+      <button class="c1" data-crowd="1"><span class="emo">🙂</span>Moderado</button>
+      <button class="c2" data-crowd="2"><span class="emo">😅</span>Cheio</button>
+      <button class="c3" data-crowd="3"><span class="emo">🥵</span>Lotado</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sugg" id="sugg"></div>
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div class="list" id="list"></div>
+
+  <footer>
+    Feito pra curtir o parque sem stress 💧 · <a href="jogo.html">Jogar Missão Molhada 🎯</a>
+  </footer>
+</div>
+
+<button class="fab" id="fab">＋ Atração</button>
+
+<!-- Modal editar/adicionar -->
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet"></div>
+</div>
+
 <script>
-const cv=document.getElementById('c'),ctx=cv.getContext('2d');
-const W=680,H=480;cv.width=W;cv.height=H;
+/* ============================================================
+   Aventura Molhada — Meu Roteiro
+   App offline de checklist + sugestão por lotação.
+   Dados 100% locais (localStorage). Sem servidor.
+   ============================================================ */
+const STORE = 'aventura-molhada-v1';
+const SEED_VERSION = 1;
 
-const rnd=(a,b)=>a+Math.random()*(b-a);
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-function rR(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
+/* Tipos de atração: cor + rótulo + emoji padrão */
+const TIPOS = {
+  radical:  {label:'Radical',  cor:'#E5573D', emoji:'🎢'},
+  familia:  {label:'Família',  cor:'#F5A623', emoji:'👨‍👩‍👧‍👦'},
+  infantil: {label:'Infantil', cor:'#7C4DFF', emoji:'🧒'},
+  aquatico: {label:'Aquático', cor:'#1E88E5', emoji:'🌊'},
+  relax:    {label:'Relax',    cor:'#2E9E6B', emoji:'🛟'},
+};
 
-const PAL=[['#FF6B6B','#C0392B'],['#FFD93D','#E67E22'],['#6BCB77','#27AE60'],['#4D96FF','#2980B9'],['#FF6FC8','#A01A7D'],['#C77DFF','#6C3483'],['#FF9A3C','#D35400'],['#26C6DA','#00838F']];
+/* Lista-semente (típica de parque aquático). TUDO editável.
+   Quando chegar a foto do parque, é só trocar esta lista.
+   int=intensidade, pop=popularidade, cap=capacidade/vazão (1-5) */
+const SEED = [
+  {nome:'Piscina de Ondas',        tipo:'aquatico', emoji:'🌊', int:2, pop:5, cap:5, altura:0,    desc:'Ondas artificiais pra galera toda. Vazão altíssima.'},
+  {nome:'Rio Lento',               tipo:'relax',    emoji:'🛟', int:1, pop:4, cap:5, altura:0,    desc:'Boiar no anel pela correnteza. Descanso perfeito.'},
+  {nome:'Kamikaze',                tipo:'radical',  emoji:'🚀', int:5, pop:5, cap:2, altura:1.40, desc:'Queda quase vertical. Adrenalina pura.'},
+  {nome:'Tornado / Funil',         tipo:'radical',  emoji:'🌀', int:5, pop:5, cap:2, altura:1.30, desc:'Boia gigante no funil. Vai e volta na parede.'},
+  {nome:'Toboágua Rampa',          tipo:'radical',  emoji:'🛝', int:4, pop:4, cap:3, altura:1.20, desc:'Descida rápida em rampa aberta.'},
+  {nome:'Toboágua Fechado',        tipo:'radical',  emoji:'🕳️', int:4, pop:4, cap:3, altura:1.20, desc:'No escuro, cheio de curvas. Surpresa!'},
+  {nome:'Half-Pipe',               tipo:'radical',  emoji:'🏂', int:4, pop:3, cap:2, altura:1.30, desc:'Sobe e desce na rampa em U.'},
+  {nome:'Boia Cross (raft)',       tipo:'familia',  emoji:'🛶', int:3, pop:4, cap:3, altura:1.10, desc:'Boia grande pra família toda descer junta.'},
+  {nome:'Toboágua Multipistas',    tipo:'familia',  emoji:'🏁', int:3, pop:4, cap:4, altura:1.10, desc:'Corrida lado a lado de barriga. Alta vazão.'},
+  {nome:'Balde Gigante',           tipo:'familia',  emoji:'🪣', int:2, pop:4, cap:4, altura:0,    desc:'Estrutura molhada com balde que vira. Muita diversão.'},
+  {nome:'Área Kids',               tipo:'infantil', emoji:'🧒', int:1, pop:3, cap:5, altura:0,    desc:'Piscina rasa e escorregadores pequenos pras crianças.'},
+  {nome:'Piscina de Trampolim',    tipo:'aquatico', emoji:'🤿', int:3, pop:3, cap:3, altura:1.20, desc:'Piscina funda com trampolins.'},
+  {nome:'Praia Rasa',              tipo:'aquatico', emoji:'🏖️', int:1, pop:3, cap:5, altura:0,    desc:'Borda de areia e água rasa pra relaxar.'},
+  {nome:'Bar Molhado',             tipo:'relax',    emoji:'🍹', int:1, pop:3, cap:4, altura:0,    desc:'Piscina com bar dentro d\'água (só maiores).'},
+];
 
-let AC;
-function snd(t){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();const n=AC.currentTime;if(t==='pop'){const o=AC.createOscillator(),g=AC.createGain();o.type='triangle';o.frequency.setValueAtTime(480,n);o.frequency.exponentialRampToValueAtTime(65,n+.2);g.gain.setValueAtTime(.5,n);g.gain.exponentialRampToValueAtTime(.001,n+.22);o.connect(g);g.connect(AC.destination);o.start(n);o.stop(n+.22);}else{const o=AC.createOscillator(),g=AC.createGain(),f=AC.createBiquadFilter();o.type='sawtooth';o.frequency.value=160;f.type='bandpass';f.frequency.value=680;f.Q.value=.8;g.gain.setValueAtTime(.17,n);g.gain.exponentialRampToValueAtTime(.001,n+.11);o.connect(f);f.connect(g);g.connect(AC.destination);o.start(n);o.stop(n+.11);}}catch(e){}}
+/* --------- Estado --------- */
+let state = load();
 
-class Balloon{
-  constructor(){const c=pick(PAL);this.x=rnd(55,W-55);this.y=H+rnd(30,65);this.r=rnd(26,44);this.vy=-rnd(.55,1.3);this.vx=rnd(-.15,.15);this.c1=c[0];this.c2=c[1];this.ph=rnd(0,Math.PI*2);this.ws=rnd(.022,.05);this.hit=false;this.a=1;this.sc=1;this.pts=Math.round(8+(44-this.r)*1.35);}
-  upd(){if(this.hit){this.a-=.07;this.sc+=.09;return;}this.ph+=this.ws;this.x+=this.vx+Math.sin(this.ph)*.5;this.y+=this.vy;}
-  drw(){
-    ctx.save();ctx.globalAlpha=Math.max(0,this.a);ctx.translate(this.x,this.y);ctx.scale(this.sc,this.sc);
-    if(!this.hit){ctx.beginPath();ctx.strokeStyle='rgba(70,70,70,.45)';ctx.lineWidth=1.5;ctx.moveTo(0,this.r+3);ctx.bezierCurveTo(9,this.r+20,-9,this.r+38,2,this.r+54);ctx.stroke();}
-    const g=ctx.createRadialGradient(-this.r*.28,-this.r*.32,this.r*.04,0,0,this.r*1.1);
-    g.addColorStop(0,'rgba(255,255,255,.88)');g.addColorStop(.3,this.c1);g.addColorStop(1,this.c2);
-    ctx.beginPath();ctx.ellipse(0,0,this.r,this.r*1.18,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-    ctx.beginPath();ctx.ellipse(-this.r*.2,-this.r*.3,this.r*.17,this.r*.1,-.4,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.4)';ctx.fill();
-    ctx.beginPath();ctx.arc(0,this.r*1.12,4,0,Math.PI*2);ctx.fillStyle=this.c2;ctx.fill();
-    if(this.r>33&&!this.hit){
-      ctx.fillStyle='white';ctx.beginPath();ctx.arc(-7,-5,3.8,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(7,-5,3.8,0,Math.PI*2);ctx.fill();
-      ctx.fillStyle='#222';ctx.beginPath();ctx.arc(-6.5,-5,2.1,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(7.5,-5,2.1,0,Math.PI*2);ctx.fill();
-      ctx.beginPath();ctx.arc(0,3,8.5,.25,Math.PI-.25);ctx.strokeStyle='#333';ctx.lineWidth=2.5;ctx.stroke();
+function load(){
+  try{
+    const raw = localStorage.getItem(STORE);
+    if(raw){
+      const s = JSON.parse(raw);
+      if(Array.isArray(s.items) && s.items.length) return s;
     }
-    ctx.restore();
-  }
-  test(px,py){return((px-this.x)/this.r)**2+((py-this.y)/(this.r*1.18))**2<=1;}
-  dead(){return this.y<-120||this.a<=0;}
+  }catch(e){}
+  return {crowd:1, filter:'todos', seed:SEED_VERSION, items:seedItems()};
+}
+function seedItems(){
+  return SEED.map((a,i)=>({id:'s'+i+'_'+(a.nome.length), done:false, ...a}));
+}
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+
+/* --------- Fila estimada por brinquedo ---------
+   Combina popularidade (puxa fila), lotação do parque (puxa fila)
+   e capacidade/vazão (reduz fila). Retorna 0..3. */
+function waitLevel(a){
+  const raw = a.pop + state.crowd*1.3 - a.cap*1.1;
+  if(raw <= 1.4) return 0;      // Curta
+  if(raw <= 3.0) return 1;      // Média
+  if(raw <= 4.6) return 2;      // Longa
+  return 3;                     // Muito longa
+}
+const WAIT_TXT = ['Fila curta','Fila média','Fila longa','Fila enorme'];
+
+/* --------- Motor de sugestão ---------
+   Estratégia:
+   • Parque tranquilo → aproveite os campeões: radicais/populares AGORA
+     (linhas curtas, pegue o que costuma lotar depois).
+   • Parque cheio/lotado → vá pros de alta vazão e relax
+     (piscina de ondas, rio lento, multipistas) e fuja das filas gigantes. */
+function suggest(){
+  const pend = state.items.filter(a=>!a.done);
+  if(!pend.length) return [];
+  const c = state.crowd;                 // 0..3
+  const cheio = c/3;                      // 0..1 (quão lotado)
+  const calmo = 1 - cheio;
+  return pend.map(a=>{
+    let s = 0;
+    // Quando lotado: priorize vazão e evite popularidade (fila)
+    s += a.cap * cheio * 2.2;
+    s -= a.pop * cheio * 1.6;
+    // Quando tranquilo: agarre os populares/radicais enquanto a fila é curta
+    s += a.pop * calmo * 1.8;
+    s += a.int * calmo * 0.9;
+    // Penalidade suave pela fila estimada atual
+    s -= waitLevel(a) * 0.8;
+    return {a, s};
+  }).sort((x,y)=>y.s-x.s).map(o=>o.a);
 }
 
-class Spark{
-  constructor(x,y,c){this.x=x;this.y=y;this.c=c;this.vx=rnd(-7,7);this.vy=rnd(-9,-1);this.r=rnd(3,8);this.a=1;}
-  upd(){this.x+=this.vx;this.y+=this.vy;this.vy+=.25;this.a-=.026;this.vx*=.97;}
-  drw(){ctx.save();ctx.globalAlpha=Math.max(0,this.a);ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=this.c;ctx.fill();ctx.restore();}
-}
-
-class Pop{
-  constructor(x,y,n){this.x=x;this.y=y;this.n=n;this.a=1;this.vy=-2;}
-  upd(){this.y+=this.vy;this.vy*=.91;this.a-=.019;}
-  drw(){ctx.save();ctx.globalAlpha=Math.max(0,this.a);ctx.textAlign='center';const sz=19+Math.min(this.n,22);ctx.font=`bold ${sz}px sans-serif`;ctx.strokeStyle='rgba(0,0,0,.4)';ctx.lineWidth=4;ctx.strokeText(`+${this.n}`,this.x,this.y);ctx.fillStyle='#FFD93D';ctx.fillText(`+${this.n}`,this.x,this.y);ctx.textAlign='left';ctx.restore();}
-}
-
-let gs='start',score=0,best=0,tl=60,newRec=false;
-let balls=[],sparks=[],pops=[];
-let shot=null,spawnC=0,frame=0,clk=null;
-const M={x:W/2,y:H/2};
-
-function spawnRate(){return Math.max(30,105-Math.floor((60-tl)*1.4));}
-
-function doShoot(px,py){
-  if(gs!=='play')return;
-  snd('squirt');
-  shot={x1:W/2,y1:H+10,x2:px,y2:py,life:14,max:14};
-  let hit=false;
-  for(let i=balls.length-1;i>=0;i--){
-    const b=balls[i];
-    if(!b.hit&&b.test(px,py)){
-      b.hit=true;hit=true;score+=b.pts;
-      pops.push(new Pop(b.x,b.y-b.r-10,b.pts));
-      const cs=[b.c1,b.c2,'#87CEEB','#4D96FF','white'];
-      for(let j=0;j<20;j++)sparks.push(new Spark(b.x,b.y,pick(cs)));
-      snd('pop');break;
-    }
-  }
-  if(!hit)for(let j=0;j<5;j++)sparks.push(new Spark(px,py,'#4D96FF'));
-}
-
-function startGame(){
-  gs='play';score=0;tl=60;frame=0;spawnC=0;newRec=false;
-  balls=[];sparks=[];pops=[];shot=null;
-  if(clk)clearInterval(clk);
-  clk=setInterval(()=>{tl--;if(tl<=0){clearInterval(clk);newRec=score>best;if(newRec)best=score;gs='over';balls=[];}},1000);
-}
-
-const CDS=[{x:65,y:48,s:1},{x:255,y:30,s:1.28},{x:470,y:58,s:.9},{x:608,y:26,s:1.08}];
-
-function drawBg(){
-  const sk=ctx.createLinearGradient(0,0,0,H);
-  sk.addColorStop(0,'#1E88E5');sk.addColorStop(.65,'#64B5F6');sk.addColorStop(1,'#B3E5FC');
-  ctx.fillStyle=sk;ctx.fillRect(0,0,W,H);
-  ctx.save();ctx.fillStyle='#FFD93D';ctx.beginPath();ctx.arc(W-68,62,34,0,Math.PI*2);ctx.fill();ctx.restore();
-  for(let i=0;i<8;i++){const a=i*Math.PI/4+frame*.005;ctx.save();ctx.strokeStyle='rgba(255,215,0,.3)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W-68+Math.cos(a)*38,62+Math.sin(a)*38);ctx.lineTo(W-68+Math.cos(a)*56,62+Math.sin(a)*56);ctx.stroke();ctx.restore();}
-  CDS.forEach(c=>{ctx.save();ctx.translate(c.x,c.y);ctx.scale(c.s,c.s);ctx.fillStyle='rgba(255,255,255,.88)';ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.arc(27,-5,26,0,Math.PI*2);ctx.arc(57,0,17,0,Math.PI*2);ctx.arc(12,8,15,0,Math.PI*2);ctx.arc(41,8,15,0,Math.PI*2);ctx.fill();ctx.restore();});
-  const gn=ctx.createLinearGradient(0,H-82,0,H);gn.addColorStop(0,'#66BB6A');gn.addColorStop(1,'#2E7D32');ctx.fillStyle=gn;ctx.fillRect(0,H-82,W,82);
-  ctx.fillStyle='#81C784';for(let i=5;i<W-5;i+=16){ctx.beginPath();ctx.moveTo(i,H-82);ctx.lineTo(i+5,H-95);ctx.lineTo(i+10,H-82);ctx.closePath();ctx.fill();}
-}
-
-function drawCursor(x,y){
-  ctx.save();ctx.translate(x,y);
-  ctx.beginPath();ctx.arc(0,0,20,0,Math.PI*2);ctx.strokeStyle='rgba(30,144,255,.92)';ctx.lineWidth=3;ctx.stroke();
-  ctx.beginPath();ctx.arc(0,0,4,0,Math.PI*2);ctx.fillStyle='#1E90FF';ctx.fill();
-  ctx.beginPath();ctx.moveTo(-32,0);ctx.lineTo(-22,0);ctx.moveTo(22,0);ctx.lineTo(32,0);ctx.moveTo(0,-32);ctx.lineTo(0,-22);ctx.moveTo(0,22);ctx.lineTo(0,32);
-  ctx.strokeStyle='rgba(30,144,255,.88)';ctx.lineWidth=2;ctx.stroke();ctx.restore();
-}
-
-function drawWater(x1,y1,x2,y2,a){
-  ctx.save();ctx.globalAlpha=a;
-  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle='rgba(100,200,255,.3)';ctx.lineWidth=14;ctx.lineCap='round';ctx.stroke();
-  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle='rgba(30,144,255,.85)';ctx.lineWidth=5;ctx.setLineDash([18,8]);ctx.stroke();ctx.setLineDash([]);
-  const dx=x2-x1,dy=y2-y1;
-  for(let i=1;i<=4;i++){ctx.beginPath();ctx.arc(x1+dx*i/5,y1+dy*i/5,3,0,Math.PI*2);ctx.fillStyle='rgba(135,200,255,.7)';ctx.fill();}
-  ctx.restore();
-}
-
-function drawHUD(){
-  ctx.fillStyle='rgba(0,0,0,.2)';rR(10,8,W-20,44,10);ctx.fill();
-  ctx.fillStyle='#FFD93D';ctx.strokeStyle='rgba(0,0,0,.45)';ctx.lineWidth=3;
-  ctx.font='bold 24px sans-serif';ctx.textAlign='left';
-  ctx.strokeText(`\u2B50 ${score}`,22,40);ctx.fillText(`\u2B50 ${score}`,22,40);
-  const bx=(W-196)/2,by=16,bw=196,bh=20;
-  ctx.fillStyle='rgba(0,0,0,.28)';rR(bx,by,bw,bh,7);ctx.fill();
-  const pct=tl/60;ctx.fillStyle=pct>.4?'#6BCB77':pct>.2?'#FFD93D':'#FF6B6B';
-  if(pct>0){rR(bx,by,bw*pct,bh,7);ctx.fill();}
-  ctx.fillStyle='white';ctx.textAlign='center';ctx.font='bold 13px sans-serif';ctx.fillText(`${tl}s`,W/2,by+bh-4);
-  if(best>0){ctx.fillStyle='rgba(255,255,255,.9)';ctx.textAlign='right';ctx.font='14px sans-serif';ctx.fillText(`\uD83C\uDFC6 ${best}`,W-22,40);}
-  ctx.textAlign='left';
-}
-
-function txt(t,x,y,fill,stroke,font,align){
-  ctx.textAlign=align||'left';if(font)ctx.font=font;
-  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=4;ctx.strokeText(t,x,y);}
-  ctx.fillStyle=fill;ctx.fillText(t,x,y);ctx.textAlign='left';
-}
-
-function drawStart(){
-  ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(0,0,W,H);
-  ctx.save();ctx.fillStyle='rgba(255,255,255,.97)';rR(W/2-210,H/2-172,420,348,18);ctx.fill();ctx.restore();
-  ctx.textAlign='center';
-  ctx.font='54px serif';ctx.fillStyle='#4D96FF';ctx.fillText('\uD83D\uDCA6',W/2,H/2-115);
-  txt('Missao Molhada!',W/2,H/2-68,'#1A6FD4',null,'bold 32px sans-serif','center');
-  txt('Estoure os baloes antes que',W/2,H/2-24,'#555',null,'18px sans-serif','center');
-  txt('eles escapem voando!',W/2,H/2+4,'#555',null,'18px sans-serif','center');
-  txt('Clique nos baloes para atirar agua',W/2,H/2+32,'#888',null,'15px sans-serif','center');
-  if(best>0)txt(`Recorde: ${best} pts`,W/2,H/2+60,'#E67E22',null,'bold 18px sans-serif','center');
-  ctx.fillStyle='#4D96FF';rR(W/2-112,H/2+80,224,56,14);ctx.fill();
-  txt('Jogar!',W/2,H/2+116,'white',null,'bold 26px sans-serif','center');
-  ctx.textAlign='left';
-}
-
-function drawOver(){
-  ctx.fillStyle='rgba(0,0,0,.46)';ctx.fillRect(0,0,W,H);
-  ctx.save();ctx.fillStyle='rgba(255,255,255,.97)';rR(W/2-210,H/2-175,420,354,18);ctx.fill();ctx.restore();
-  ctx.textAlign='center';
-  ctx.font='50px serif';ctx.fillText('\u23F0',W/2,H/2-118);
-  txt('Acabou o Tempo!',W/2,H/2-70,'#E74C3C',null,'bold 34px sans-serif','center');
-  txt('Voce fez:',W/2,H/2-26,'#555',null,'20px sans-serif','center');
-  txt(`${score}`,W/2,H/2+46,'#1A6FD4',null,'bold 64px sans-serif','center');
-  txt('pontos',W/2,H/2+74,'#777',null,'18px sans-serif','center');
-  if(newRec&&score>0)txt('Novo Recorde! \uD83C\uDFC6',W/2,H/2+108,'#E67E22',null,'bold 20px sans-serif','center');
-  else if(best>0)txt(`Recorde: ${best} pts`,W/2,H/2+108,'#999',null,'17px sans-serif','center');
-  ctx.fillStyle='#6BCB77';rR(W/2-112,H/2+124,224,56,14);ctx.fill();
-  txt('Jogar de Novo',W/2,H/2+160,'white',null,'bold 24px sans-serif','center');
-  ctx.textAlign='left';
-}
-
-function loop(){
-  requestAnimationFrame(loop);drawBg();
-  if(gs==='start'){drawStart();return;}
-  if(gs==='play'){
-    spawnC++;
-    if(spawnC>=spawnRate()){spawnC=0;balls.push(new Balloon());if(tl<25&&Math.random()<.35)balls.push(new Balloon());}
-    balls.forEach(b=>b.upd());sparks.forEach(s=>s.upd());pops.forEach(p=>p.upd());
-    if(shot)shot.life--;
-    balls=balls.filter(b=>!b.dead());sparks=sparks.filter(s=>s.a>0);pops=pops.filter(p=>p.a>0);
-    if(shot&&shot.life<=0)shot=null;
-    balls.forEach(b=>b.drw());
-    if(shot)drawWater(shot.x1,shot.y1,shot.x2,shot.y2,shot.life/shot.max);
-    sparks.forEach(s=>s.drw());pops.forEach(p=>p.drw());
-    drawHUD();drawCursor(M.x,M.y);frame++;
-  }
-  if(gs==='over'){
-    sparks.forEach(s=>{s.upd();s.drw();});sparks=sparks.filter(s=>s.a>0);
-    pops.forEach(p=>{p.upd();p.drw();});pops=pops.filter(p=>p.a>0);
-    drawOver();
+/* Frase de motivo pra cada sugestão */
+function motivo(a){
+  const w = waitLevel(a);
+  if(state.crowd>=2){
+    if(a.cap>=4 && w<=1) return 'Alta vazão — anda rápido mesmo cheio';
+    if(a.tipo==='relax'||a.tipo==='aquatico') return 'Refresca sem enfrentar fila enorme';
+    if(w<=1) return 'A fila deve estar curta agora';
+    return 'Boa opção pro momento';
+  }else{
+    if(a.tipo==='radical') return 'Pega agora que a fila está curta!';
+    if(a.pop>=4) return 'Costuma lotar depois — vá antes';
+    return 'Ótimo momento pra encarar';
   }
 }
 
-function pos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*(W/r.width),y:(e.clientY-r.top)*(H/r.height)};}
-cv.addEventListener('mousemove',e=>{const p=pos(e);M.x=p.x;M.y=p.y;});
-cv.addEventListener('click',e=>{
-  const{x,y}=pos(e);
-  if(gs==='start'&&y>H/2+80&&y<H/2+136&&Math.abs(x-W/2)<112)startGame();
-  else if(gs==='over'&&y>H/2+124&&y<H/2+180&&Math.abs(x-W/2)<112)startGame();
-  else doShoot(x,y);
+/* --------- Render --------- */
+const $ = s=>document.querySelector(s);
+const listEl=$('#list'), suggEl=$('#sugg'), filtersEl=$('#filters');
+
+const FILTROS = [
+  {key:'todos',label:'Todos'},
+  {key:'pendentes',label:'A fazer'},
+  {key:'feitos',label:'Feitos'},
+  {key:'radical',label:'Radical'},
+  {key:'familia',label:'Família'},
+  {key:'aquatico',label:'Aquático'},
+  {key:'relax',label:'Relax'},
+  {key:'infantil',label:'Infantil'},
+];
+
+function matchFilter(a){
+  const f = state.filter;
+  if(f==='todos') return true;
+  if(f==='pendentes') return !a.done;
+  if(f==='feitos') return a.done;
+  return a.tipo===f;
+}
+
+function render(){
+  const total = state.items.length;
+  const feitos = state.items.filter(a=>a.done).length;
+  const pct = total? Math.round(feitos/total*100):0;
+
+  // anel de progresso
+  const C = 157;
+  $('#ringFg').setAttribute('stroke-dashoffset', C - C*pct/100);
+  $('#ringTxt').textContent = pct+'%';
+  $('#subCount').textContent = feitos+' de '+total+' atrações';
+
+  // lotação
+  document.querySelectorAll('#crowd button').forEach(b=>{
+    b.setAttribute('aria-pressed', String(+b.dataset.crowd===state.crowd));
+  });
+
+  // filtros (com contagem)
+  filtersEl.innerHTML = FILTROS.map(f=>{
+    let n = state.items.filter(a=>{
+      if(f.key==='todos') return true;
+      if(f.key==='pendentes') return !a.done;
+      if(f.key==='feitos') return a.done;
+      return a.tipo===f.key;
+    }).length;
+    return `<button class="chip" data-f="${f.key}" aria-pressed="${state.filter===f.key}">
+      ${f.label}<span class="n">${n}</span></button>`;
+  }).join('');
+
+  // sugestões
+  renderSugg();
+
+  // lista
+  const vis = state.items.filter(matchFilter);
+  if(!vis.length){
+    listEl.innerHTML = `<div class="empty"><div class="big">🔍</div>
+      Nada aqui neste filtro.<br>Toque em <b>Todos</b> pra ver tudo.</div>`;
+  }else{
+    listEl.innerHTML = vis.map(cardHTML).join('');
+  }
+  save();
+}
+
+function renderSugg(){
+  const pend = state.items.filter(a=>!a.done);
+  if(!pend.length){
+    suggEl.innerHTML = `<div class="allDone"><div class="big">🏆</div>
+      <p>Você fez tudo!</p><small>Parabéns, roteiro completo. Bora relaxar. 🍹</small></div>`;
+    return;
+  }
+  const top = suggest().slice(0,3);
+  const crowdWord = ['tranquilo','moderado','cheio','lotado'][state.crowd];
+  suggEl.innerHTML = `
+    <h2>✨ Vá agora</h2>
+    <div class="hint">Com o parque <b>${crowdWord}</b>, estas são as melhores escolhas:</div>
+    ${top.map((a,i)=>`
+      <div class="pick" data-go="${a.id}">
+        <div class="rank">${i+1}</div>
+        <div class="emo">${a.emoji}</div>
+        <div class="pinfo"><b>${esc(a.nome)}</b><span>${motivo(a)}</span></div>
+        <div class="go">Marcar ✓</div>
+      </div>`).join('')}`;
+}
+
+function cardHTML(a){
+  const t = TIPOS[a.tipo];
+  const w = waitLevel(a);
+  const dots = a.done? '' : `<span class="dots" title="Intensidade">${'●'.repeat(a.int)}${'○'.repeat(5-a.int)}</span>`;
+  return `<div class="card ${a.done?'done':''}" data-id="${a.id}">
+    <div class="check">✓</div>
+    <div class="cemo">${a.emoji}</div>
+    <div class="cbody">
+      <b>${esc(a.nome)}</b>
+      <div class="cmeta">
+        <span class="tag tipo" style="background:${t.cor}">${t.label}</span>
+        ${a.done? '' : `<span class="wait w${w}">${WAIT_TXT[w]}</span>`}
+        ${dots}
+        ${a.altura>0? `<span class="altura">↕ ${a.altura.toFixed(2).replace('.',',')}m</span>`:''}
+      </div>
+    </div>
+    <button class="cmenu" data-menu="${a.id}" aria-label="Editar ${esc(a.nome)}">⋮</button>
+  </div>`;
+}
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* --------- Ações --------- */
+function toggle(id){
+  const a = state.items.find(x=>x.id===id);
+  if(!a) return;
+  a.done = !a.done;
+  if(a.done && navigator.vibrate) navigator.vibrate(18);
+  render();
+}
+function setCrowd(c){ state.crowd=c; render(); }
+function setFilter(f){ state.filter=f; render(); }
+
+/* --------- Modal (adicionar / editar / opções) --------- */
+const overlay=$('#overlay'), sheet=$('#sheet');
+function openSheet(html){ sheet.innerHTML=html; overlay.classList.add('open'); }
+function closeSheet(){ overlay.classList.remove('open'); }
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeSheet(); });
+
+const EMOJIS = ['🌊','🛟','🚀','🌀','🛝','🕳️','🏂','🛶','🏁','🪣','🧒','🤿','🏖️','🍹','💦','🌈','⚡','🐊','🐬','🦈','🏄','🤽','🎢','🎯'];
+
+function editSheet(id){
+  const a = id? state.items.find(x=>x.id===id) : {nome:'',tipo:'aquatico',emoji:'💦',int:3,pop:3,cap:3,altura:0,desc:''};
+  const novo = !id;
+  openSheet(`
+    <h3>${novo?'➕ Nova atração':'✏️ Editar atração'}</h3>
+    <div class="sub">${novo?'Adicione um brinquedo do seu parque.':'Ajuste os detalhes desta atração.'}</div>
+    <div class="field">
+      <label>Nome</label>
+      <input id="f_nome" value="${esc(a.nome)}" placeholder="Ex.: Toboágua Radical" maxlength="40">
+    </div>
+    <div class="field">
+      <label>Emoji</label>
+      <div class="emopick" id="f_emopick">
+        ${EMOJIS.map(e=>`<button type="button" data-e="${e}" aria-pressed="${e===a.emoji}">${e}</button>`).join('')}
+      </div>
+    </div>
+    <div class="field">
+      <label>Tipo</label>
+      <select id="f_tipo">
+        ${Object.entries(TIPOS).map(([k,v])=>`<option value="${k}" ${k===a.tipo?'selected':''}>${v.emoji} ${v.label}</option>`).join('')}
+      </select>
+    </div>
+    <div class="row3">
+      <div class="field"><label>Intensidade</label>
+        <select id="f_int">${lvlOpts(a.int)}</select></div>
+      <div class="field"><label>Popularidade</label>
+        <select id="f_pop">${lvlOpts(a.pop)}</select></div>
+      <div class="field"><label>Vazão/fila</label>
+        <select id="f_cap">${lvlOpts(a.cap)}</select></div>
+    </div>
+    <div class="field">
+      <label>Altura mínima (m) — 0 se não tiver</label>
+      <input id="f_altura" type="number" step="0.05" min="0" max="2.5" value="${a.altura||0}" inputmode="decimal">
+    </div>
+    <div class="field">
+      <label>Observação (opcional)</label>
+      <textarea id="f_desc" placeholder="Dica, ponto de referência...">${esc(a.desc||'')}</textarea>
+    </div>
+    <div class="sactions">
+      ${novo?'':'<button class="btn btn-danger" id="f_del">🗑️</button>'}
+      <button class="btn btn-ghost" id="f_cancel">Cancelar</button>
+      <button class="btn btn-primary" id="f_save">Salvar</button>
+    </div>
+  `);
+  let emoSel = a.emoji;
+  sheet.querySelectorAll('#f_emopick button').forEach(b=>{
+    b.onclick=()=>{ emoSel=b.dataset.e;
+      sheet.querySelectorAll('#f_emopick button').forEach(x=>x.setAttribute('aria-pressed', x===b));
+    };
+  });
+  $('#f_cancel').onclick=closeSheet;
+  const delBtn = $('#f_del'); if(delBtn) delBtn.onclick=()=>{ removeItem(id); closeSheet(); };
+  $('#f_save').onclick=()=>{
+    const nome = $('#f_nome').value.trim();
+    if(!nome){ $('#f_nome').focus(); return; }
+    const data = {
+      nome, emoji:emoSel, tipo:$('#f_tipo').value,
+      int:+$('#f_int').value, pop:+$('#f_pop').value, cap:+$('#f_cap').value,
+      altura:Math.max(0, parseFloat($('#f_altura').value)||0),
+      desc:$('#f_desc').value.trim(),
+    };
+    if(novo){ state.items.push({id:'u'+Date.now(), done:false, ...data}); }
+    else { Object.assign(a, data); }
+    closeSheet(); render();
+  };
+}
+function lvlOpts(v){ return [1,2,3,4,5].map(n=>`<option value="${n}" ${n===v?'selected':''}>${n}</option>`).join(''); }
+
+function removeItem(id){
+  state.items = state.items.filter(x=>x.id!==id);
+  render();
+}
+
+function optionsSheet(){
+  const feitos = state.items.filter(a=>a.done).length;
+  openSheet(`
+    <h3>⚙️ Opções</h3>
+    <div class="sub">Seu roteiro fica salvo neste aparelho, mesmo offline.</div>
+    <div class="sactions" style="flex-direction:column">
+      <button class="btn btn-ghost" id="o_uncheck">↺ Desmarcar tudo (${feitos} feitos)</button>
+      <button class="btn btn-ghost" id="o_reseed">🔄 Restaurar lista padrão do parque</button>
+      <button class="btn btn-primary" id="o_close" style="margin-top:4px">Fechar</button>
+    </div>
+    <p style="font-size:.74rem;color:var(--cinza);margin-top:14px;text-align:center">
+      Dica: toque em ＋ pra adicionar os brinquedos reais do seu parque,
+      ou no ⋮ de cada cartão pra editar.
+    </p>
+  `);
+  $('#o_close').onclick=closeSheet;
+  $('#o_uncheck').onclick=()=>{ if(confirm('Desmarcar todas as atrações?')){ state.items.forEach(a=>a.done=false); closeSheet(); render(); } };
+  $('#o_reseed').onclick=()=>{ if(confirm('Isso substitui a lista atual pela lista padrão e apaga suas edições. Continuar?')){
+    state.items = seedItems(); state.seed=SEED_VERSION; closeSheet(); render(); } };
+}
+
+/* --------- Eventos --------- */
+document.getElementById('crowd').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-crowd]'); if(b) setCrowd(+b.dataset.crowd);
 });
-cv.addEventListener('touchstart',e=>{e.preventDefault();const{x,y}=pos(e.touches[0]);M.x=x;M.y=y;if(gs==='start'&&y>H/2+80&&y<H/2+136&&Math.abs(x-W/2)<112)startGame();else if(gs==='over'&&y>H/2+124&&y<H/2+180&&Math.abs(x-W/2)<112)startGame();else doShoot(x,y);},{passive:false});
-cv.addEventListener('touchmove',e=>{e.preventDefault();const p=pos(e.touches[0]);M.x=p.x;M.y=p.y;},{passive:false});
-loop();
+filtersEl.addEventListener('click',e=>{
+  const b=e.target.closest('button[data-f]'); if(b) setFilter(b.dataset.f);
+});
+listEl.addEventListener('click',e=>{
+  const menu=e.target.closest('[data-menu]');
+  if(menu){ e.stopPropagation(); editSheet(menu.dataset.menu); return; }
+  const card=e.target.closest('[data-id]');
+  if(card) toggle(card.dataset.id);
+});
+suggEl.addEventListener('click',e=>{
+  const p=e.target.closest('[data-go]'); if(p) toggle(p.dataset.go);
+});
+$('#fab').addEventListener('click',()=>editSheet(null));
+$('#btnMenu').addEventListener('click',optionsSheet);
+
+render();
+
+/* --------- PWA: funciona offline no parque --------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
 </script>
+</body>
+</html>
