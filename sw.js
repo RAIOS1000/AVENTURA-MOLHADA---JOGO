@@ -1,7 +1,7 @@
 /* Service worker — cache app-shell para uso offline no parque.
    Estratégia: network-first pros arquivos do app (pega atualização quando
    há sinal), com fallback pro cache quando estiver offline. */
-const CACHE = 'aventura-molhada-v2';
+const CACHE = 'aventura-molhada-v3';
 const ASSETS = ['./', 'index.html', 'jogo.html', 'manifest.webmanifest'];
 
 self.addEventListener('install', e => {

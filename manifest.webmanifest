@@ -1,7 +1,7 @@
 {
-  "name": "Alpen Park — Meu Roteiro",
-  "short_name": "Meu Roteiro",
-  "description": "Marque as atrações que já fez no Alpen Park e receba sugestões de brinquedos conforme a lotação, com preços e comparativo de passaportes.",
+  "name": "Minhas Viagens — Roteiro do dia",
+  "short_name": "Minhas Viagens",
+  "description": "Organize sua viagem por dias: importe o roteiro (lista/foto) e vá marcando o passo a passo. Inclui o dia do Alpen Park com sugestões por lotação, preços e passaportes.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
